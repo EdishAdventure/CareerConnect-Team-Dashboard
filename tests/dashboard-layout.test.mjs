@@ -61,3 +61,11 @@ test('comfortable width restored and compact density overrides removed',()=>{
   assert.match(css,/\.overview-top-grid/);
   assert.match(css,/\.overview-middle-grid/);
 });
+
+
+test('Team view presents only current remaining story points, without outdated allocations',()=>{
+  const section=app.slice(app.indexOf('function renderTeam()'),app.indexOf('function renderQuality()'));
+  assert.match(section,/remainingTotal/);
+  assert.match(section,/remaining.*SP/);
+  assert.doesNotMatch(section,/baselineTotal|currentAllocation|Nov 3 allocation|team-reassignment-note|baselineSP/);
+});
