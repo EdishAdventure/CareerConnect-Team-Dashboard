@@ -19,4 +19,5 @@ jobs:
           test -f public/index.html
           test -f public/styles.css
           test -f public/favicon.svg
+          test -f public/ownership.js
           test -f wrangler.toml

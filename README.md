@@ -46,6 +46,12 @@ For automated GitHub-to-Cloudflare deployment, connect this repository's `main` 
 
 This repository is **public, as authorized by its owner**, and therefore the historical assignment data in `public/snapshot.js` is public. The original CareerConnect repository remains private. Live private data is returned only by a Worker endpoint requiring a valid Cloudflare Access JWT, and its GitHub token belongs in a Worker secret, never in source.
 
+## Live ownership and display density
+
+**GitHub Issue assignees are authoritative** for all Sprint 3 tasks and parent stories. The dashboard derives the feature leads, workstream owners, and personal assignments from those records on every successful sync. The local November 3 snapshot is only a fallback when live sync is unavailable. Empty assignee lists display **Unassigned** rather than reviving a former owner.
+
+The dashboard now opens in **Compact** mode (smaller sidebar, fewer oversized cards and less vertical spacing). Use the **Compact / Comfortable** toggle in the top navigation to change density; your browser remembers your preference locally. Compact mode does not hide tasks or reduce access to testing evidence.
+
 ## Team workflow
 
 GitHub is the source of truth. Everyone updates issues and PRs in the CareerConnect repository. The dashboard provides a read-only view of what is due, assigned, verified, and blocked. Completed acceptance tests require recorded evidence; closing a task alone is not equivalent to a passed acceptance test.
