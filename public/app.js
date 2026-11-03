@@ -144,21 +144,18 @@ function renderTeam(){
  const members=['EdishAdventure','ElSnoozer','bthorng','mzllo','mariaacelena','KaylaKOUM'].map(person);
  const points=i=>Number(C.taskSP?.[i.number]||0);
  const assigned=tasks();
- const baselineTotal=Object.values(C.baselineSP||{}).reduce((sum,n)=>sum+Number(n),0);
  const remainingTotal=assigned.filter(i=>!verifiedDone(i)).reduce((sum,i)=>sum+points(i),0);
- return `${renderIntro()}<section class="section"><div class="section-header"><div><h2 class="section-title">Responsibility & capacity</h2><div class="section-kicker">Approved Nov 3 allocation: ${baselineTotal} SP · Current remaining from GitHub tasks: ${remainingTotal} SP</div></div><button class="section-action" data-view="mywork">Open My Work ${icon('arrow')}</button></div>
+ return `${renderIntro()}<section class="section"><div class="section-header"><div><h2 class="section-title">Responsibility & capacity</h2><div class="section-kicker">Remaining workload: ${remainingTotal} SP · ${data.source==='live'?'synced with GitHub':'planning snapshot — sync to update'}</div></div><button class="section-action" data-view="mywork">Open My Work ${icon('arrow')}</button></div>
  <div class="team-roster">${members.map(p=>{
   const mine=assigned.filter(i=>i.owner===p.login);
   const pending=mine.filter(i=>!verifiedDone(i));
   const remaining=pending.reduce((sum,i)=>sum+points(i),0);
-  const currentAllocation=mine.reduce((sum,i)=>sum+points(i),0);
   const goalLeads=C.officialGoals.filter(goal=>goalLeaders(goal).includes(p.login)).map(goal=>goal.title);
   return `<button class="team-roster-card" data-member="${E(p.login)}" aria-label="View ${E(p.name)} assigned tasks">
    <div class="team-roster-main">${avatar(p.login)}<div class="team-roster-description"><h3>${E(p.name)}</h3><p>${E(p.role)}</p><small>${E(goalLeads.length?'Live feature lead: '+goalLeads.join(' · '):'Implementation / QA contributor')}</small></div></div>
-   <div class="team-roster-progress"><div><strong>${remaining} SP</strong><span>remaining · ${pending.length} open / unverified</span></div><div><strong>${Number(C.baselineSP?.[p.login]||0)} SP</strong><span>Nov 3 allocation</span></div><span class="roster-arrow">${icon('arrow')}</span></div>
-   ${currentAllocation!==Number(C.baselineSP?.[p.login]||0)?`<div class="team-reassignment-note">Current assigned scope: ${currentAllocation} SP after ownership changes</div>`:''}
+   <div class="team-roster-progress"><div><strong>${remaining} SP</strong><span>remaining · ${pending.length} open / unverified</span></div><span class="roster-arrow">${icon('arrow')}</span></div>
   </button>`;
- }).join('')}</div><p class="roster-note">Baseline allocation is fixed at the approved 89 SP. Remaining SP uses current GitHub task assignees and verified completion; parent-story estimates are not counted again. Select a member to open their tasks.</p></section>
+ }).join('')}</div><p class="roster-note">Remaining SP is calculated from each member’s latest synced task assignments and verified completion. Parent-story estimates are not counted again. Select a member to open their tasks.</p></section>
  ${renderCollaboration()}`;
 }
 function renderQuality(){const tests=acceptance().sort((a,b)=>a.number-b.number);return `${renderIntro()}<div class="grid-4 section"><div class="kpi-card"><div class="kpi-top"><span class="kpi-label">New acceptance tests</span><span class="kpi-icon">${icon('check')}</span></div><div class="kpi-value">${tests.length}</div><div class="kpi-foot">Specifications prepared in GitHub</div></div><div class="kpi-card"><div class="kpi-top"><span class="kpi-label">Evidence marked PASS</span><span class="kpi-icon">${icon('flag')}</span></div><div class="kpi-value">${tests.filter(x=>x.execution==='PASS').length}</div><div class="kpi-foot">Require tester, date and actual result</div></div><div class="kpi-card"><div class="kpi-top"><span class="kpi-label">US-04 carryover AT</span><span class="kpi-icon">${icon('file')}</span></div><div class="kpi-value">${(data.carryoverTests||[]).filter(x=>x.state==='closed'&&x.execution==='PASS').length}<small> / 2</small></div><div class="kpi-foot">#107 and #108 · PASS plus closure required</div></div><div class="kpi-card"><div class="kpi-top"><span class="kpi-label">CI status</span><span class="kpi-icon">${icon('code')}</span></div><div class="kpi-value" style="font-size:18px;margin-top:20px">${data.ci?E((data.ci.conclusion||data.ci.status||'unknown').toUpperCase()):'Not synced'}</div><div class="kpi-foot">${data.ci?`Most recent workflow · ${friendlyDate(data.ci.updated_at)}`:'Connect GitHub for latest workflow run'}</div></div></div>
