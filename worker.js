@@ -78,37 +78,69 @@ async function allIssues(token) {
   return result;
 }
 
-const projectQuery = [
-  'query($owner:String!,$number:Int!,$after:String){',
-  'user(login:$owner){projectV2(number:$number){items(first:100,after:$after){',
-  'pageInfo{hasNextPage endCursor}',
-  'nodes{content{... on Issue{number repository{nameWithOwner}}}',
-  'fieldValues(first:20){nodes{... on ProjectV2ItemFieldSingleSelectValue{',
-  'name field{... on ProjectV2SingleSelectField{name}}}}}}}}}}'
-].join('');
+// User-owned GitHub Projects V2 is queried separately from repository Issues.
+// GitHub documents read:project for GraphQL Projects queries. A fine-grained
+// repository token may read Issues successfully but not the user's Project.
+const projectQuery = `
+query SprintProjectStatus($owner:String!, $number:Int!, $after:String) {
+  user(login:$owner) {
+    projectV2(number:$number) {
+      items(first:100,after:$after) {
+        pageInfo { hasNextPage endCursor }
+        nodes {
+          content { ... on Issue { number repository { nameWithOwner } } }
+          fieldValues(first:20) {
+            nodes {
+              ... on ProjectV2ItemFieldSingleSelectValue {
+                name
+                field { ... on ProjectV2FieldCommon { name } }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}`;
+
+export function projectStatusFromNode(node, repository = FULL) {
+  if (!node?.content || node.content.repository?.nameWithOwner !== repository) return null;
+  const number = Number(node.content.number);
+  if (!Number.isSafeInteger(number) || number <= 0) return null;
+  const field = (node.fieldValues?.nodes || []).find(
+    f => String(f?.field?.name || '').toLowerCase() === 'status' && typeof f?.name === 'string'
+  );
+  return {number, status:field?.name || null};
+}
 
 async function projectStatuses(token) {
   const statuses = new Map();
   let cursor = null;
   for (let page = 0; page < 7; page++) {
-    const r = await fetch('https://api.github.com/graphql', {
+    const response = await fetch('https://api.github.com/graphql', {
       method:'POST',
       headers:{...apiHeaders(token), 'Content-Type':'application/json'},
-      body:JSON.stringify({query:projectQuery, variables:{owner:OWNER, number:1, after:cursor}})
+      body:JSON.stringify({
+        query:projectQuery,
+        variables:{owner:OWNER,number:1,after:cursor}
+      })
     });
-    if (!r.ok) return null;
-    const parsed = await r.json();
-    const items = parsed.data?.user?.projectV2?.items;
-    if (parsed.errors?.length || !items) return null;
+    if (!response.ok) return {statuses:null,reason:'project_permission'};
+    const result = await response.json();
+    const items = result.data?.user?.projectV2?.items;
+    if (result.errors?.length || !items) return {statuses:null,reason:'project_permission'};
     for (const node of items.nodes || []) {
-      if (node?.content?.repository?.nameWithOwner !== FULL) continue;
-      const value = (node.fieldValues?.nodes || []).find(x => x?.field?.name?.toLowerCase() === 'status');
-      if (value?.name) statuses.set(node.content.number, value.name);
+      const entry = projectStatusFromNode(node);
+      if (entry?.status) statuses.set(entry.number,entry.status);
     }
     if (!items.pageInfo?.hasNextPage || !items.pageInfo.endCursor) break;
     cursor = items.pageInfo.endCursor;
   }
-  return statuses;
+  // A board may contain redacted issue nodes when the token has Projects
+  // permission but cannot read the linked private repository.
+  return statuses.size
+    ? {statuses,reason:null}
+    : {statuses:null,reason:'project_items_unavailable'};
 }
 
 function executionStatus(issue) {
@@ -126,23 +158,24 @@ function dueDate(issue) {
   return day >= 3 && day <= 16 ? 'Nov ' + String(day).padStart(2,'0') : null;
 }
 
-async function dashboard(token) {
+async function dashboard(token, projectsToken) {
   const [issues, board, prs, runs] = await Promise.all([
     allIssues(token),
-    projectStatuses(token).catch(() => null),
+    projectStatuses(projectsToken).catch(() => ({statuses:null,reason:'project_unavailable'})),
     githubJSON('/repos/' + FULL + '/pulls?state=open&per_page=35', token).catch(() => []),
     githubJSON('/repos/' + FULL + '/actions/runs?per_page=1', token).catch(() => ({workflow_runs:[]}))
   ]);
   return {
     source:'live',
     capturedAt:new Date().toISOString(),
-    boardAvailable:board !== null,
+    boardAvailable:board.statuses !== null,
+    boardReason:board.reason,
     items:issues.filter(i => ![107,108].includes(i.number)).map(i => ({
       number:i.number, title:i.title, state:i.state, url:i.html_url,
       assignees:(i.assignees || []).map(u => u.login),
       labels:(i.labels || []).map(l => l.name).filter(Boolean),
       updatedAt:i.updated_at, closedAt:i.closed_at,
-      boardStatus:board?.get(i.number) || null,
+      boardStatus:board.statuses?.get(i.number) || null,
       execution:executionStatus(i), due:dueDate(i)
     })),
     carryoverTests:[107,108].map(number => {
@@ -180,7 +213,7 @@ export default {
       const verified = await verifyCloudflareAccess(request, env);
       if (!verified.ok) return responseJSON({error:verified.message}, verified.status);
       if (!env.GITHUB_TOKEN) return responseJSON({error:'GitHub token is not configured'}, 503);
-      try { return responseJSON(await dashboard(env.GITHUB_TOKEN)); }
+      try { return responseJSON(await dashboard(env.GITHUB_TOKEN, env.GITHUB_PROJECTS_TOKEN || env.GITHUB_TOKEN)); }
       catch (_) { return responseJSON({error:'GitHub sync failed. Check the token and repository permissions.'}, 502); }
     }
     return env.ASSETS.fetch(request);

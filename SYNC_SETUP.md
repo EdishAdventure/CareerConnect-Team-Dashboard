@@ -20,9 +20,9 @@ The static `snapshot.js` includes a November 3, 2026 snapshot of task titles, as
 
 **Important:** Deploying the website does not automatically configure private GitHub sync or team access.
 
-## 3. Protect the entire deployed website
+## 3. Protect the live private API
 
-Create a Cloudflare Zero Trust **Access application** for the dashboard hostname (and disable or protect any alternate `workers.dev` / preview URLs). Create an allow policy for the six authorized team members. Test from an incognito browser and confirm an unauthenticated user cannot access `/api/overview`.
+Keep the public dashboard root available if desired, but create a Cloudflare Zero Trust **Access application** protecting the **exact dashboard hostname with path `/api/*`** (and protect any alternate `workers.dev` / preview URLs that serve the same private API). Create an allow policy for the authorized teammates and TA. Test incognito and confirm an unauthenticated user cannot access `/api/overview`.
 
 In the Cloudflare Worker settings, add the following environment variables:
 
@@ -42,7 +42,21 @@ Alternatively, use **Settings → Variables and Secrets** in Cloudflare. Do not 
 
 ### GitHub token scope
 
-Use a fine-grained token restricted to the original private CareerConnect repository; give it read-only access to **Contents/Metadata, Issues, Pull requests, and Actions**. GitHub Projects V2 status is optional and may require additional GraphQL/Project permission. Without that permission, the dashboard still syncs issues and PRs, but Project Status fields will be unavailable.
+Use a fine-grained token restricted to the original private CareerConnect repository; give it read-only access to **Contents/Metadata, Issues, Pull requests, and Actions**. Keep this token unchanged for issue/PR/CI syncing.
+
+### Optional: show Ready / In Progress / In Review from GitHub Projects
+
+The main repository token usually **cannot read the user-owned GitHub Project V2 board**. This is why you may see “Project Status unavailable” even while the issue sync is live. GitHub's Projects GraphQL documentation specifies a **classic personal access token with `read:project`** for user-owned project queries.
+
+To enable this **optional** feature:
+
+1. Sign in to GitHub as the owner of [CareerConnect Project 1](https://github.com/users/EdishAdventure/projects/1).
+2. Go to [GitHub Settings → Developer settings → Personal access tokens (classic)](https://github.com/settings/tokens/new) and create a separate short-lived token. Select only `read:project` initially.
+3. In Cloudflare Workers & Pages → `careerconnect-team-dashboard` → **Settings → Variables and Secrets**, add **Secret** `GITHUB_PROJECTS_TOKEN` with this value. Do not add it to `wrangler.toml` or any GitHub file.
+4. Re-deploy if prompted, then sign in to the protected API and click **Sync now**. The green sync notice should say **GitHub Project statuses included**.
+5. If the board returns *Project Status unavailable*, GitHub may be redacting linked private issue content from the project-only token. Keep the existing task sync operational; use **Open GitHub Project** to see statuses manually. Do not grant broad `repo` permissions just to remove the warning without a separate security review.
+
+The Worker uses `GITHUB_PROJECTS_TOKEN` **only for the optional board query**; it continues to use `GITHUB_TOKEN` for private repository issues. GitHub Project status is metadata, not proof of feature completion. Only completed GitHub issues (and actual PASS execution evidence for acceptance tests) count toward verified progress. A missing board status is displayed as unavailable, never guessed.
 
 ## 4. Verify live syncing
 
@@ -60,7 +74,7 @@ The site refreshes every 10 minutes while open. Sync is **read-only**: teammates
 - **401/403**: Cloudflare Access login/valid JWT required or audience/domain mismatch.
 - **503**: GitHub secret or Access JWT verification settings missing.
 - **502**: Token lacks access to private repository, GitHub API errors, or rate limit.
-- **Project status missing**: optional GraphQL Project access is unavailable; issue and PR data still work.
+- **Project status missing**: the user-owned Project needs an additional scoped classic token with `read:project`. See the optional steps above; issue/PR syncing works without it.
 - **Site says snapshot**: not deployed or the live API response did not succeed.
 
 ## Security reminders
