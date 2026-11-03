@@ -2,6 +2,13 @@ name = "careerconnect-team-dashboard"
 main = "worker.js"
 compatibility_date = "2026-10-01"
 
+# Public Cloudflare Access identifiers. These are NOT GitHub credentials.
+# Wrangler deployments replace dashboard text variables unless listed here.
+# Keep GITHUB_TOKEN and GITHUB_PROJECTS_TOKEN in encrypted Worker secrets ONLY.
+[vars]
+ACCESS_TEAM_DOMAIN = "wispy-breeze-8cf3.cloudflareaccess.com"
+ACCESS_AUD = "3f2bdb33168eb9d9c70aac18e71d88b840eea354d2d698ebacb70dd2d77c5608"
+
 [assets]
 directory = "./public"
 binding = "ASSETS"
