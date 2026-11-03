@@ -7,13 +7,24 @@ window.SPRINT_CONFIG = {
   freeze: '2026-11-12',
   release: '2026-11-15',
   syncedAt: '2026-11-03T12:10:00-05:00',
+  // Approved Nov 3 allocation. These values are a historical baseline; the
+  // current remaining SP are recomputed using live task assignees and evidence.
+  baselineSP: {EdishAdventure:19,ElSnoozer:17,bthorng:17,mzllo:13,mariaacelena:10,KaylaKOUM:13},
+  taskSP: {
+    162:3,167:8,169:2,171:3,172:3,
+    66:3,67:2,157:3,166:5,174:2,179:2,
+    159:5,161:3,165:5,175:2,176:2,
+    155:3,156:2,163:5,173:1,177:2,
+    158:5,170:5,
+    160:3,164:3,168:5,178:2
+  },
   people: [
-    {login:'EdishAdventure', name:'Jiaju', full:'Jiaju Shi', role:'Integration · QA · delivery', color:'#5865dd', initials:'JS'},
-    {login:'mzllo', name:'Chloe', full:'Chloe', role:'Recruiter & saved jobs', color:'#d67956', initials:'CH'},
-    {login:'bthorng', name:'Brandon', full:'Brandon', role:'Notifications & reminders', color:'#258f8b', initials:'BR'},
-    {login:'mariaacelena', name:'Maria', full:'Maria', role:'Analytics frontend · CI testing', color:'#a272c9', initials:'MA'},
-    {login:'KaylaKOUM', name:'Kayla', full:'Kayla', role:'Frontend & acceptance', color:'#d18a29', initials:'KA'},
-    {login:'ElSnoozer', name:'Annik', full:'Annik', role:'GenAI resume feedback', color:'#3d84b7', initials:'AN'}
+    {login:'EdishAdventure', name:'Jiaju', full:'Jiaju Shi', role:'Generative AI · Integration & delivery', color:'#5865dd', initials:'JS'},
+    {login:'mzllo', name:'Chloe', full:'Chloe', role:'Recruiter dashboard · Saved jobs', color:'#d67956', initials:'CH'},
+    {login:'bthorng', name:'Brandon', full:'Brandon', role:'Notifications · Deadline reminders', color:'#258f8b', initials:'BR'},
+    {login:'mariaacelena', name:'Maria', full:'Maria', role:'Analytics frontend · Automated testing/CI', color:'#a272c9', initials:'MA'},
+    {login:'KaylaKOUM', name:'Kayla', full:'Kayla', role:'Shared frontend · Acceptance testing', color:'#d18a29', initials:'KA'},
+    {login:'ElSnoozer', name:'Annik', full:'Annik', role:'Analytics/history · Recruiter profile · AI support', color:'#3d84b7', initials:'AN'}
   ],
   groups: [
     {key:'recruiter',story:13,id:'US-04',name:'Recruiter / company profile',short:'Profile carryover',category:'Recruiter experience',owner:'ElSnoozer',tasks:[66,67,169],due:'Nov 12',color:'#8c7af2',note:'Finish profile UI and authorization evidence; shared-company membership remains deferred.'},
@@ -60,11 +71,19 @@ window.SPRINT_CONFIG = {
     {id:'ai',num:'04',title:'Generative AI feature',subtitle:'Consent-based resume feedback with a real AI provider',groups:['ai'],lead:'EdishAdventure',leadStories:[26]}
   ],
   collaboration: [
-    {id:'rec',feature:'Recruiter profile',from:['ElSnoozer'],to:['mzllo','EdishAdventure'],handoff:'Profile UI and validation → implementation review and acceptance evidence',target:'Nov 12'},
-    {id:'analytics',feature:'Analytics',from:['ElSnoozer'],to:['mariaacelena'],handoff:'Analytics data contract and tests → history dashboard UI',target:'Nov 10'},
-    {id:'notify',feature:'Notification inbox',from:['bthorng'],to:['KaylaKOUM','EdishAdventure'],handoff:'Shared API → inbox UI and recruiter event trigger',target:'Nov 09'},
-    {id:'saved',feature:'Saved jobs & reminders',from:['mzllo'],to:['bthorng','KaylaKOUM'],handoff:'Saved-job API → deadline rules and job navigation',target:'Nov 11'},
-    {id:'ai',feature:'AI resume feedback',from:['EdishAdventure'],to:['ElSnoozer','KaylaKOUM'],handoff:'AI provider & consent ← PDF extraction; response format → frontend UI',target:'Nov 11'}
+    {id:'rec',feature:'Recruiter profile',steps:[
+      {login:'mzllo',label:'Sprint 2 UI handoff'},
+      {task:66,label:'Remaining profile UI / validation (#66–67)'},
+      {task:169,label:'Acceptance evidence'}
+    ],handoff:'Chloe hands over the completed Sprint 2 UI context; Annik finishes #66 and #67; Jiaju records independent acceptance evidence.',target:'Nov 12'},
+    {id:'analytics',feature:'Analytics & history',from:['ElSnoozer'],to:['mariaacelena'],handoff:'Annik #157 data contract & #174 acceptance → Maria #158 history-chart UI',target:'Nov 10'},
+    {id:'notify',feature:'Notification inbox & recruiter alerts',from:['bthorng'],to:['KaylaKOUM','EdishAdventure'],handoff:'Brandon #159 shared API → Kayla #160 inbox UI; Jiaju #162 recruiter trigger',target:'Nov 09'},
+    {id:'saved',feature:'Saved jobs & reminders',from:['mzllo'],to:['bthorng','KaylaKOUM'],handoff:'Chloe #163 saved-job API → Brandon #165 reminders and Kayla #164 UI',target:'Nov 11'},
+    {id:'ai',feature:'AI resume feedback',steps:[
+      {task:166,label:'PDF extraction'},
+      {task:167,label:'AI provider & consent'},
+      {task:168,label:'Feedback UI'}
+    ],handoff:'Annik #166 → Jiaju #167 → Kayla #168; Annik independently executes AI acceptance #179.',target:'Nov 11'}
   ],
   deferred: [8,10,11,19,24,25,65],
   milestones: [
