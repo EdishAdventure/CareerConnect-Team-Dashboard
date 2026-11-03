@@ -1,26 +1,50 @@
 # CareerConnect — Team Dashboard
 
-A separate, read-only progress dashboard for the SOEN 341 CareerConnect project.
+A lightweight **Sprint 3 command center** for SOEN 341 Team 01, managed separately from the CareerConnect application.
 
-> **Setup status (November 3, 2026):** This repository is initialized, but the Sprint 3 dashboard source has intentionally **not** been uploaded. This repository is currently **public**, while the Version 3 dashboard bundle contains assignment and task information obtained from a **private** CareerConnect repository. Do not upload that snapshot until this dashboard repository is private.
+**Source project (private):** [EdishAdventure/SOEN341-2026-Team01](https://github.com/EdishAdventure/SOEN341-2026-Team01)  
+**Dashboard repository:** [EdishAdventure/CareerConnect-Team-Dashboard](https://github.com/EdishAdventure/CareerConnect-Team-Dashboard)  
+**Sprint deadline:** November 16, 2026; internal release November 15.
 
-## Before importing the dashboard
+## Features
 
-1. In this repository, open **Settings → General → Danger Zone → Change repository visibility → Make private**.
-2. Verify that GitHub displays **Private** by the repository name.
-3. Import Version 3 into this repository via a feature branch and pull request. The source bundle contains `public/index.html`, `public/app.js`, `public/styles.css`, `public/snapshot.js`, `public/favicon.svg`, `worker.js`, `wrangler.toml`, `README.md`, and `SYNC_SETUP.md`.
-4. In Cloudflare Workers & Pages, connect this repository to a Worker. Set the build root to the directory containing `wrangler.toml` and configure deployment from `main`.
-5. Configure **Cloudflare Access** for the *entire deployed hostname*, including `/api/*`, before enabling the private GitHub API integration. Restrict access to the six team members, disable any unprotected alternative workers.dev hostnames, and test in an incognito browser.
-6. Add a **read-only** GitHub token for `EdishAdventure/SOEN341-2026-Team01` as a **Cloudflare Worker secret** named `GITHUB_TOKEN`. Never commit a token to GitHub, browser JavaScript, or `.env`.
-7. Use **Sync now** on the protected site to retrieve live issue status, task owners, acceptance test execution, PRs, and CI information.
+- Four official Sprint 3 outcomes on the Overview, with expandable detail
+- Daily roadmap (November 3–16) with clickable tasks and milestones
+- A **My Work** view for Jiaju, Chloe, Brandon, Maria, Kayla and Annik
+- Team responsibilities and expandable collaboration handoffs
+- Schedule health comparing planned vs. closed and verified work
+- Workstreams, issue deep links, PR/CI health, and acceptance-test evidence
+- Read-only GitHub sync via Cloudflare Worker; manual sync and 10-minute polling
 
-## Intended workflow
+## Files
 
-- **GitHub is the source of truth.** Teammates update Issues, sub-issues, PRs, test evidence, and Project board status in the CareerConnect project repository.
-- **The dashboard is read-only.** It displays the four official Sprint 3 outcomes, personal work queues, daily timeline, shared dependencies, and schedule health.
-- **Automatic sync** is designed to refresh every 10 minutes while open. Closed tasks count as complete; acceptance tests additionally require explicit execution evidence.
-- **Deployment is separate** from CareerConnect application CI/CD. Dashboard changes should follow a branch → PR → review → merge workflow.
+```text
+public/
+  index.html       Dashboard shell
+  styles.css       Responsive styles
+  snapshot.js      November 3 issue snapshot (public by owner choice)
+  app.js           Dashboard interactions and schedule model
+  favicon.svg      Site icon
+worker.js          GitHub integration API with verified Access JWT
+wrangler.toml      Cloudflare Workers deployment configuration
+SYNC_SETUP.md      Deploy, authenticate, and connect live sync
+```
 
-## Security
+## Quick start
 
-A private source repository alone does *not* protect a deployed website or its API endpoints. Cloudflare Access must protect all reachable hostnames. Do not add the Worker GitHub token until that protection has been tested. The **main CareerConnect repository should not need code changes** for this dashboard.
+```bash
+npm run check
+npx wrangler deploy
+```
+
+For automated GitHub-to-Cloudflare deployment, connect this repository's `main` branch in the Cloudflare dashboard. Follow **[SYNC_SETUP.md](SYNC_SETUP.md)** to protect the dashboard with Cloudflare Access and add the read-only GitHub token.
+
+**The website is not live merely because these files are in GitHub.** Cloudflare must be connected and Access configured. Until then, open `public/index.html` locally as a November 3 snapshot.
+
+## Privacy and security
+
+This repository is **public, as authorized by its owner**, and therefore the historical assignment data in `public/snapshot.js` is public. The original CareerConnect repository remains private. Live private data is returned only by a Worker endpoint requiring a valid Cloudflare Access JWT, and its GitHub token belongs in a Worker secret, never in source.
+
+## Team workflow
+
+GitHub is the source of truth. Everyone updates issues and PRs in the CareerConnect repository. The dashboard provides a read-only view of what is due, assigned, verified, and blocked. Completed acceptance tests require recorded evidence; closing a task alone is not equivalent to a passed acceptance test.

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#f6f7fa" />
+  <meta name="description" content="CareerConnect Sprint 3 — team roadmap, individual assignments, schedule health, and read-only GitHub progress." />
+  <title>CareerConnect · Sprint Command</title>
+  
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-row">
+        <div class="brand-mark"><span>c</span><i></i></div>
+        <div><div class="brand-name">careerconnect<span class="brand-period">.</span></div><div class="brand-sub">ENGINEERING WORKSPACE</div></div>
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="workspace-select"><div class="workspace-avatar">S3</div><div class="workspace-text"><strong>Sprint 03</strong><small>Fall 2026 · SOEN 341</small></div><span class="workspace-chevron">⌄</span></div>
+      <div class="nav-section-label">WORKSPACE</div>
+      <nav class="nav-list" aria-label="Main navigation">
+        <button class="nav-link active" data-view="overview"><span data-icon="layout"></span>Overview<span class="nav-active-dot"></span></button>
+        <button class="nav-link" data-view="work"><span data-icon="layers"></span>Workstreams<span id="nav-work-count" class="nav-count"></span></button>
+        <button class="nav-link" data-view="team"><span data-icon="users"></span>Team capacity</button>
+        <button class="nav-link" data-view="mywork"><span data-icon="user"></span>My work</button>
+        <button class="nav-link" data-view="quality"><span data-icon="check"></span>Quality & tests</button>
+        <button class="nav-link" data-view="timeline"><span data-icon="calendar"></span>Timeline</button>
+      </nav>
+      <div class="nav-section-label sidebar-later">QUICK LINKS</div>
+      <nav class="nav-list" aria-label="External links">
+        <a class="nav-link" id="board-link" target="_blank" rel="noopener noreferrer"><span data-icon="columns"></span>GitHub project<span data-icon="external" class="nav-right"></span></a>
+        <a class="nav-link" id="repo-link" target="_blank" rel="noopener noreferrer"><span data-icon="github"></span>Repository<span data-icon="external" class="nav-right"></span></a>
+      </nav>
+      <div class="sidebar-bottom"><div class="sidebar-notice"><div class="sidebar-notice-top"><span data-icon="clock"></span> Release window</div><div class="sidebar-notice-big">Nov 16</div><div class="sidebar-notice-copy">Sprint 3 evaluation deadline</div><div class="sidebar-notice-progress"><span></span></div><div class="sidebar-notice-small">Feature freeze · Nov 12</div></div><div class="sidebar-account"><div class="avatar initials purple">JS</div><div><b>Team 01</b><small>CareerConnect project</small></div><span data-icon="more"></span></div></div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar"><button id="mobile-menu" class="icon-button mobile-menu" aria-label="Toggle navigation"><span data-icon="menu"></span></button><div class="breadcrumbs"><span>Workspace</span><span class="breadcrumb-chevron">/</span><strong id="breadcrumb-current">Overview</strong></div><div class="topbar-right"><span class="topbar-tag">SPRINT 3</span><button class="icon-button" id="theme-help" aria-label="About dashboard data"><span data-icon="info"></span></button><a class="topbar-external" target="_blank" rel="noopener noreferrer" id="top-issues-link">Open GitHub <span data-icon="external"></span></a></div></header>
+      <section class="content-wrap">
+        <div class="view-head"><div><div class="eyebrow" id="page-eyebrow">SOEN 341 / TEAM 01</div><h1 id="page-title">Sprint command center<span class="title-dot">.</span></h1><p id="page-subtitle">One place to see what's moving, what's blocked, and what must ship.</p></div><div class="head-actions"><div class="sync-group"><span id="source-badge" class="source-badge"><span class="status-dot amber"></span>GitHub snapshot</span><div class="synced-time" id="synced-time">Captured Nov 3, 2026</div></div><button class="button button-primary" id="refresh-btn"><span data-icon="refresh"></span> Sync now</button></div></div>
+        <div id="notice" class="notice hidden" role="status"></div>
+        <div id="view-content"></div>
+        <footer class="footer"><div>CareerConnect / Team 01 <span>·</span> Built for Sprint 3</div><div>Source of truth: <a id="footer-repo" target="_blank" rel="noopener noreferrer">GitHub Issues & Projects</a><span class="footer-divider">·</span> Read-only dashboard</div></footer>
+      </section>
+    </main>
+  </div>
+  <dialog class="sync-dialog" id="sync-dialog" aria-labelledby="sync-dialog-title">
+    <div class="sync-dialog-top"><h2 id="sync-dialog-title">Connect live GitHub sync</h2><button id="sync-close" class="icon-button" aria-label="Close">×</button></div>
+    <p id="sync-detail-status" role="status"></p>
+    <div class="sync-steps"><div><span>1</span><p><strong>Deploy the included Cloudflare Worker.</strong> The same host serves the website and read-only API.</p></div><div><span>2</span><p><strong>Set a read-only GitHub token as a Worker secret.</strong> Never place the token in the website files.</p></div><div><span>3</span><p><strong>Protect the entire hostname with Cloudflare Access.</strong> Allow only your team, including the API path.</p></div></div>
+    <pre class="sync-commands">npx wrangler login
+npx wrangler deploy
+npx wrangler secret put GITHUB_TOKEN</pre>
+    <div class="sync-bottom"><button class="button" id="sync-copy">Copy deploy commands</button><a href="https://developers.cloudflare.com/cloudflare-one/access-controls/applications/" target="_blank" rel="noopener noreferrer">Cloudflare Access guide ↗</a></div>
+    <p class="sync-note">Once deployed, click <strong>Sync now</strong> to fetch GitHub changes. Refresh is also automatic every 10 minutes. Local HTML remains a safely labeled offline preview.</p>
+  </dialog>
+  <div class="modal-overlay hidden" id="detail-overlay" aria-hidden="true"><div class="modal-backdrop" id="modal-backdrop"></div><aside class="detail-panel" id="detail-panel" aria-label="Issue details" role="dialog" aria-modal="true"></aside></div>
+  <script src="/snapshot.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
