@@ -68,6 +68,7 @@ test('HTML imports ownership helpers before main app',()=>{
   const html=readFileSync(new URL('public/index.html',root),'utf8');
   assert.ok(html.indexOf('src="ownership.js"')>0);
   assert.ok(html.indexOf('src="ownership.js"')<html.indexOf('src="app.js"'));
-  assert.match(html,/density-compact/);
-  assert.match(html,/id="density-toggle"/);
+  assert.match(html,/data-view="insights"/);
+  assert.doesNotMatch(html,/density-compact/);
+  assert.doesNotMatch(html,/id="density-toggle"/);
 });
