@@ -11,7 +11,7 @@ window.SPRINT_CONFIG = {
     {login:'EdishAdventure', name:'Jiaju', full:'Jiaju Shi', role:'Integration · QA · delivery', color:'#5865dd', initials:'JS'},
     {login:'mzllo', name:'Chloe', full:'Chloe', role:'Recruiter & saved jobs', color:'#d67956', initials:'CH'},
     {login:'bthorng', name:'Brandon', full:'Brandon', role:'Notifications & reminders', color:'#258f8b', initials:'BR'},
-    {login:'mariaacelena', name:'Maria', full:'Maria', role:'Analytics & trends', color:'#a272c9', initials:'MA'},
+    {login:'mariaacelena', name:'Maria', full:'Maria', role:'Analytics frontend · CI testing', color:'#a272c9', initials:'MA'},
     {login:'KaylaKOUM', name:'Kayla', full:'Kayla', role:'Frontend & acceptance', color:'#d18a29', initials:'KA'},
     {login:'ElSnoozer', name:'Annik', full:'Annik', role:'GenAI resume feedback', color:'#3d84b7', initials:'AN'}
   ],
