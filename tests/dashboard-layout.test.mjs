@@ -20,7 +20,7 @@ test('approved baseline contains six members with exactly 89 story points',()=>{
 });
 
 test('all and only 27 approved remaining child tasks have a story-point estimate',()=>{
-  const allTaskIds=config.groups.flatMap(group=>Array.from(group.tasks));
+  const allTaskIds=Array.from(config.groups).flatMap(group=>Array.from(group.tasks));
   assert.equal(allTaskIds.length,27);
   assert.equal(new Set(allTaskIds).size,27);
   assert.deepEqual(Object.keys(config.taskSP).map(Number).sort((a,b)=>a-b),allTaskIds.sort((a,b)=>a-b));
