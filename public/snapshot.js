@@ -1,4 +1,4 @@
-/* GitHub issue snapshot captured 2026-11-03. Actual work status is inferred ONLY from open/closed state.
+/* GitHub issue snapshot refreshed 2026-11-03 after ownership transfer. Actual work status is inferred ONLY from open/closed state.
    Live Cloudflare Worker sync replaces these records with GitHub API data. */
 window.SPRINT_CONFIG = {
   repo: 'EdishAdventure/SOEN341-2026-Team01',
@@ -16,12 +16,12 @@ window.SPRINT_CONFIG = {
     {login:'ElSnoozer', name:'Annik', full:'Annik', role:'GenAI resume feedback', color:'#3d84b7', initials:'AN'}
   ],
   groups: [
-    {key:'recruiter',story:13,id:'US-04',name:'Recruiter / company profile',short:'Profile carryover',category:'Recruiter experience',owner:'mzllo',tasks:[66,67,169],due:'Nov 12',color:'#8c7af2',note:'Finish profile UI and authorization evidence; shared-company membership remains deferred.'},
+    {key:'recruiter',story:13,id:'US-04',name:'Recruiter / company profile',short:'Profile carryover',category:'Recruiter experience',owner:'ElSnoozer',tasks:[66,67,169],due:'Nov 12',color:'#8c7af2',note:'Finish profile UI and authorization evidence; shared-company membership remains deferred.'},
     {key:'recruiter-plus',story:9,id:'US-15',name:'Recruiter dashboard enhancements',short:'Recruiter enhancements',category:'Recruiter experience',owner:'mzllo',tasks:[155,156,173],due:'Nov 12',color:'#8c7af2',note:'Sprint 2 story remains closed; only new posting counts and date filters are in scope.'},
     {key:'saved',story:16,id:'US-09',name:'Saved jobs MVP',short:'Saved jobs',category:'Seeker experience',owner:'mzllo',tasks:[163,164,177],due:'Nov 12',color:'#ef9a60',note:'Required foundation for deadline reminders.'},
     {key:'status-notifs',story:23,id:'US-17',name:'Seeker status-change notifications',short:'Status notifications',category:'Notifications',owner:'bthorng',tasks:[159,160,161,175],due:'Nov 12',color:'#43a5ac',note:'Shared inbox and recruiter status-change triggers.'},
-    {key:'ai',story:26,id:'US-20',name:'AI-powered resume feedback',short:'AI resume feedback',category:'AI feature',owner:'ElSnoozer',tasks:[166,167,168,179],due:'Nov 12',color:'#6686e9',note:'Secure PDF extraction, real provider adapter, consent and validation.'},
-    {key:'analytics',story:151,id:'US-22',name:'Application analytics & trends',short:'Analytics & trends',category:'Seeker experience',owner:'mariaacelena',tasks:[157,158,174],due:'Nov 12',color:'#ba81de',note:'Extend existing seeker overview and history without duplicate dashboards.'},
+    {key:'ai',story:26,id:'US-20',name:'AI-powered resume feedback',short:'AI resume feedback',category:'AI feature',owner:'EdishAdventure',tasks:[166,167,168,179],due:'Nov 12',color:'#6686e9',note:'Secure PDF extraction, real provider adapter, consent and validation.'},
+    {key:'analytics',story:151,id:'US-22',name:'Application analytics & trends',short:'Analytics & trends',category:'Seeker experience',owner:'ElSnoozer',tasks:[157,158,174],due:'Nov 12',color:'#ba81de',note:'Extend existing seeker overview and history without duplicate dashboards.'},
     {key:'recruiter-notifs',story:152,id:'US-23',name:'Recruiter new-application alerts',short:'Recruiter alerts',category:'Notifications',owner:'bthorng',tasks:[162,176],due:'Nov 12',color:'#43a5ac',note:'Reuses US-17 notification infrastructure; one alert per valid submission.'},
     {key:'deadline',story:153,id:'US-24',name:'Saved-job deadline reminders',short:'Deadline reminders',category:'Notifications',owner:'bthorng',tasks:[165,178],due:'Nov 12',color:'#43a5ac',note:'In-app only; US-12 email delivery is outside Sprint 3.'},
     {key:'delivery',story:154,id:'TRACKER',name:'Quality & release readiness',short:'QA & release',category:'Release readiness',owner:'EdishAdventure',tasks:[170,171,172],due:'Nov 15',color:'#66768b',note:'CI, test fixtures, meeting minutes, individual PDFs, summary and final demo.'}
@@ -54,17 +54,17 @@ window.SPRINT_CONFIG = {
     16:{focus:'Submission & TA evaluation',goals:['Verify submission package and repository permissions','Demonstrate working implementation and supporting evidence','Submit / attend evaluation according to the assigned lab schedule']}
   },
   officialGoals: [
-    {id:'recruiter',num:'01',title:'Recruiter dashboard & postings',subtitle:'Review candidates, manage postings and update status',groups:['recruiter','recruiter-plus'],lead:'mzllo'},
-    {id:'analytics',num:'02',title:'Application analytics & history',subtitle:'Five-status breakdown, accurate weekly activity',groups:['analytics'],lead:'mariaacelena'},
-    {id:'notices',num:'03',title:'Notifications & reminders',subtitle:'Status, recruiter and saved-job deadline alerts',groups:['status-notifs','recruiter-notifs','deadline','saved'],lead:'bthorng'},
-    {id:'ai',num:'04',title:'Generative AI feature',subtitle:'Consent-based resume feedback with a real AI provider',groups:['ai'],lead:'ElSnoozer'}
+    {id:'recruiter',num:'01',title:'Recruiter dashboard & postings',subtitle:'Review candidates, manage postings and update status',groups:['recruiter','recruiter-plus'],lead:'mzllo',leadStories:[9,13]},
+    {id:'analytics',num:'02',title:'Application analytics & history',subtitle:'Five-status breakdown, accurate weekly activity',groups:['analytics'],lead:'ElSnoozer',leadStories:[151]},
+    {id:'notices',num:'03',title:'Notifications & reminders',subtitle:'Status, recruiter and saved-job deadline alerts',groups:['status-notifs','recruiter-notifs','deadline','saved'],lead:'bthorng',leadStories:[23]},
+    {id:'ai',num:'04',title:'Generative AI feature',subtitle:'Consent-based resume feedback with a real AI provider',groups:['ai'],lead:'EdishAdventure',leadStories:[26]}
   ],
   collaboration: [
-    {id:'rec',feature:'Recruiter experience',from:['mzllo'],to:['EdishAdventure'],handoff:'Recruiter profile → acceptance evidence & integration',target:'Nov 12'},
-    {id:'analytics',feature:'Analytics & status updates',from:['mariaacelena'],to:['bthorng'],handoff:'Confirm status semantics and data consistency',target:'Nov 10'},
-    {id:'notify',feature:'Notification inbox',from:['bthorng'],to:['KaylaKOUM'],handoff:'Notification APIs → shared inbox and read/unread UI',target:'Nov 09'},
+    {id:'rec',feature:'Recruiter profile',from:['ElSnoozer'],to:['mzllo','EdishAdventure'],handoff:'Profile UI and validation → implementation review and acceptance evidence',target:'Nov 12'},
+    {id:'analytics',feature:'Analytics',from:['ElSnoozer'],to:['mariaacelena'],handoff:'Analytics data contract and tests → history dashboard UI',target:'Nov 10'},
+    {id:'notify',feature:'Notification inbox',from:['bthorng'],to:['KaylaKOUM','EdishAdventure'],handoff:'Shared API → inbox UI and recruiter event trigger',target:'Nov 09'},
     {id:'saved',feature:'Saved jobs & reminders',from:['mzllo'],to:['bthorng','KaylaKOUM'],handoff:'Saved-job API → deadline rules and job navigation',target:'Nov 11'},
-    {id:'ai',feature:'AI resume feedback',from:['ElSnoozer'],to:['KaylaKOUM'],handoff:'PDF/AI API + consent contract → feedback UI',target:'Nov 11'}
+    {id:'ai',feature:'AI resume feedback',from:['EdishAdventure'],to:['ElSnoozer','KaylaKOUM'],handoff:'AI provider & consent ← PDF extraction; response format → frontend UI',target:'Nov 11'}
   ],
   deferred: [8,10,11,19,24,25,65],
   milestones: [
@@ -85,12 +85,12 @@ const createItem=(number,title,owner,kind,group,due,closed=false,priority='P0')=
   execution:kind==='acceptance'?'NOT RUN':null
 });
 window.SPRINT_SNAPSHOT = {
-  capturedAt:'2026-11-03T12:10:00-05:00',
+  capturedAt:'2026-11-03T15:43:00-05:00',
   source:'snapshot',
   items:[
-    createItem(13,'[US-04] Recruiter / Company Profile','mzllo','story','recruiter','Nov 16'),
-    createItem(66,'[TASK-31] Build and integrate recruiter/company profile UI','mzllo','task','recruiter','Nov 10'),
-    createItem(67,'[TASK-32] Test recruiter-owned company data and access rules','mzllo','task','recruiter','Nov 11'),
+    createItem(13,'[US-04] Recruiter / Company Profile','ElSnoozer','story','recruiter','Nov 16'),
+    createItem(66,'[TASK-31] Build and integrate recruiter/company profile UI','ElSnoozer','task','recruiter','Nov 10'),
+    createItem(67,'[TASK-32] Test recruiter-owned company data and access rules','ElSnoozer','task','recruiter','Nov 11'),
     createItem(169,'[TASK-79] Execute and record US-04 carryover acceptance tests','EdishAdventure','task','recruiter','Nov 12'),
     createItem(9,'[US-15] Recruiter Application Dashboard','mzllo','story','recruiter-plus','Sprint 2',true,'P1'),
     createItem(155,'[TASK-65] Extend US-15 with per-posting counts and application date filters','mzllo','task','recruiter-plus','Nov 09',false,'P1'),
@@ -105,23 +105,23 @@ window.SPRINT_SNAPSHOT = {
     createItem(160,'[TASK-70] In-app notification inbox UI with read/unread','KaylaKOUM','task','status-notifs','Nov 09'),
     createItem(161,'[TASK-71] Trigger seeker status-change alerts only on actual changes','bthorng','task','status-notifs','Nov 09'),
     createItem(175,'[AT-US17-01] Seeker receives only legitimate application status alerts','bthorng','acceptance','status-notifs','Nov 14'),
-    createItem(26,'[US-20] Request AI-Assisted Resume Feedback','ElSnoozer','story','ai','Nov 16'),
+    createItem(26,'[US-20] Request AI-Assisted Resume Feedback','EdishAdventure','story','ai','Nov 16'),
     createItem(166,'[TASK-76] Resume feedback: authorized PDF text extraction endpoint','ElSnoozer','task','ai','Nov 08'),
-    createItem(167,'[TASK-77] Resume feedback: GenAI adapter, consent, validation and tests','ElSnoozer','task','ai','Nov 10'),
+    createItem(167,'[TASK-77] Resume feedback: GenAI adapter, consent, validation and tests','EdishAdventure','task','ai','Nov 10'),
     createItem(168,'[TASK-78] Resume feedback UI: select resume and display suggestions','KaylaKOUM','task','ai','Nov 11'),
     createItem(179,'[AT-US20-01] AI resume feedback succeeds and fails safely','ElSnoozer','acceptance','ai','Nov 14'),
-    createItem(151,'[US-22] Application Analytics and Trends Dashboard','mariaacelena','story','analytics','Nov 16'),
-    createItem(157,'[TASK-67] Derive and test US-22 analytics from existing application history','mariaacelena','task','analytics','Nov 08'),
+    createItem(151,'[US-22] Application Analytics and Trends Dashboard','ElSnoozer','story','analytics','Nov 16'),
+    createItem(157,'[TASK-67] Derive and test US-22 analytics from existing application history','ElSnoozer','task','analytics','Nov 08'),
     createItem(158,'[TASK-68] Extend seeker overview with US-22 status breakdown and trend chart','mariaacelena','task','analytics','Nov 10'),
-    createItem(174,'[AT-US22-01] Application status breakdown and activity trends','mariaacelena','acceptance','analytics','Nov 14'),
+    createItem(174,'[AT-US22-01] Application status breakdown and activity trends','ElSnoozer','acceptance','analytics','Nov 14'),
     createItem(152,'[US-23] Recruiter New-Application Notifications','bthorng','story','recruiter-notifs','Nov 16'),
-    createItem(162,'[TASK-72] Trigger recruiter new-application alerts and cover edge cases','bthorng','task','recruiter-notifs','Nov 09'),
+    createItem(162,'[TASK-72] Trigger recruiter new-application alerts and cover edge cases','EdishAdventure','task','recruiter-notifs','Nov 09'),
     createItem(176,'[AT-US23-01] Recruiter new-application notification','bthorng','acceptance','recruiter-notifs','Nov 14'),
     createItem(153,'[US-24] In-App Saved-Job Deadline Reminders','bthorng','story','deadline','Nov 16'),
     createItem(165,'[TASK-75] In-app deadline reminder eligibility and deduplication','bthorng','task','deadline','Nov 11'),
     createItem(178,'[AT-US24-01] In-app saved-job deadline reminder eligibility','KaylaKOUM','acceptance','deadline','Nov 14'),
     createItem(154,'Sprint plan, QA gates, and submission tracker','EdishAdventure','tracker','delivery','Nov 15'),
-    createItem(170,'[TASK-80] CI, automated tests and PR regression gate','EdishAdventure','task','delivery','Nov 12'),
+    createItem(170,'[TASK-80] CI, automated tests and PR regression gate','mariaacelena','task','delivery','Nov 12'),
     createItem(171,'[TASK-81] Repeatable demo fixtures and end-to-end QA walkthrough','EdishAdventure','task','delivery','Nov 14'),
     createItem(172,'[TASK-82] Finalize logs, report, minutes and demo','EdishAdventure','task','delivery','Nov 15')
   ],
