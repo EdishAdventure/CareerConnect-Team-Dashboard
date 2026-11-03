@@ -11,7 +11,7 @@ A lightweight **Sprint 3 command center** for SOEN 341 Team 01, managed separate
 - Four official Sprint 3 outcomes on the Overview, with expandable detail
 - Daily roadmap (November 3–16) with planned focus bullets and direct links to update due tasks on GitHub
 - A **My Work** view for Jiaju, Chloe, Brandon, Maria, Kayla and Annik, with visible **Update in GitHub** links
-- Team responsibility cards with the approved **89-SP November 3 baseline** and dynamically computed remaining SP from live assignments and verified completion
+- Team responsibility cards with **only up-to-date remaining story points**, calculated from live task assignments and verified completion (no historical comparisons or transfer notices)
 - Explicit AI and recruiter-profile handoff sequences, with task-owner links to GitHub
 - Dedicated **Insights** page for detailed metrics, workstreams, release gates, and GitHub PR activity
 - Team responsibilities and expandable collaboration handoffs
