@@ -210,93 +210,83 @@ button.timeline-card:hover{border-color:#c5cdec;background:#f9faff}
 @media(max-width:800px){.update-guidance{flex-wrap:wrap}.update-guidance .progress-action{margin-left:30px}.focus-row-linked{gap:5px}.daily-task{flex-wrap:wrap}.daily-task .progress-action{margin-left:37px}}
 
 
-/* Density controls: compact is the default, comfortable remains one click away.
-   Preserve meaningful font sizes while reducing repetitive white space. */
-.density-toggle{display:inline-flex;align-items:center;gap:6px;border:1px solid #e4e9f3;border-radius:8px;background:#fff;padding:6px 9px;color:#576681;font-size:10.5px;font-weight:750;white-space:nowrap}
-.density-toggle:hover{background:#f2f4fd;color:#4857c9}
-.density-toggle[aria-pressed="true"]{background:#eef1fe;color:#4357c8;border-color:#cdd7f4}
-.density-toggle svg{height:14px;width:14px}
-.density-compact .topbar{height:55px;padding:0 23px}
-.density-compact .topbar-right{gap:12px}
-.density-compact .content-wrap{padding:21px 24px 16px;max-width:1540px}
-.density-compact .view-head{margin-bottom:16px;gap:13px}
-.density-compact .view-head h1{font-size:25px;letter-spacing:-.9px}
-.density-compact .view-head p{margin-top:6px;font-size:11.5px}
-.density-compact .view-head .eyebrow{margin-bottom:6px}
-.density-compact .section{margin-bottom:14px}
-.density-compact .section-header{margin-bottom:9px}
-.density-compact .section-kicker{margin-top:3px}
-.density-compact .info-banner{padding:9px 12px;margin-bottom:14px;line-height:1.45}
-.density-compact .goals-grid{gap:9px}
-.density-compact .goal-card{padding:12px 13px;min-height:132px;border-radius:10px}
-.density-compact .goal-num{height:24px;width:24px;font-size:10px;border-radius:6px}
-.density-compact .goal-card h3{margin:10px 0 5px;font-size:12px}
-.density-compact .goal-card p{line-height:1.35;margin-bottom:9px;font-size:10px}
-.density-compact .goal-footer{padding-top:7px;font-size:9.5px}
-.density-compact .goal-footer .table-avatar{height:20px;width:20px}
-.density-compact .pace-card{padding:15px 18px 12px;border-radius:12px}
-.density-compact .pace-heading h2{font-size:17px}
-.density-compact .pace-heading p{margin-top:4px}
-.density-compact .panel{padding:14px}
-.density-compact .focus-grid,.density-compact .cols-main{gap:11px}
-.density-compact .focus-panel,.density-compact .focus-checkpoint{padding:14px}
-.density-compact .panel-title-row{margin-bottom:10px}
-.density-compact .focus-row{padding:7px 2px}
-.density-compact .focus-large-date{font-size:31px;margin-top:9px}
-.density-compact .kpi-card{padding:13px;min-height:95px}
-.density-compact .kpi-value{font-size:25px;margin-top:8px}
-.density-compact .kpi-foot{margin-top:5px}
-.density-compact .stream-grid,.density-compact .member-grid{gap:10px}
-.density-compact .stream-card,.density-compact .member-card{padding:13px}
-.density-compact .stream-card h3{margin:8px 0 5px;font-size:13px}
-.density-compact .stream-card p{min-height:0;line-height:1.45}
-.density-compact .stream-card-progress{margin-top:10px}
-.density-compact .owner-summary{padding:9px}
-.density-compact .ownership-strip{gap:8px}
-.density-compact .person-banner{padding:16px 20px;border-radius:12px}
-.density-compact .profile-avatar{width:47px;height:47px;font-size:14px}
-.density-compact .person-banner h2{font-size:21px}
-.density-compact .member-switcher{padding:10px 14px}
-.density-compact .daily-panel{padding:16px 19px}
-.density-compact .daily-head{padding-bottom:11px}
-.density-compact .daily-columns{margin-top:12px;gap:21px}
-.density-compact .roadmap-shell{padding:14px 18px}
-.density-compact .roadmap-header{margin:8px 0}
-.density-compact .roadmap-day{min-height:40px}
-.density-compact .timeline-card{padding:10px 12px;margin-bottom:10px}
-.density-compact .more-details>summary,.density-compact .collab-disclosure>summary{padding:11px 14px}
-.density-compact .issue-table th{padding:9px 10px}
-.density-compact .issue-table td{padding:9px 10px}
-.density-compact .issue-table th:first-child,.density-compact .issue-table td:first-child{padding-left:12px}
-.density-compact .update-guidance{padding:9px 12px}
-.density-compact .footer{margin-top:18px;padding-top:11px}
-@media(min-width:901px){
- .density-compact .sidebar{width:210px;flex-basis:210px;padding:17px 10px 12px}
- .density-compact .brand-row{padding:2px 9px 16px;gap:8px}
- .density-compact .brand-mark{height:31px;width:31px;flex-basis:31px}
- .density-compact .brand-mark span{font-size:31px}
- .density-compact .brand-name{font-size:14px}
- .density-compact .brand-sub{font-size:8px}
- .density-compact .workspace-select{margin:0 3px 17px;padding:8px;gap:7px}
- .density-compact .workspace-avatar{height:29px;width:29px}
- .density-compact .workspace-text strong{font-size:11px}
- .density-compact .workspace-text small{font-size:9px}
- .density-compact .nav-section-label{margin:0 12px 6px;font-size:9px}
- .density-compact .nav-link{padding:9px 10px;font-size:11.5px;gap:9px}
- .density-compact .sidebar-later{margin-top:20px}
- .density-compact .sidebar-notice{margin:18px 3px 12px;padding:12px;border-radius:10px}
- .density-compact .sidebar-notice-big{font-size:23px;margin-top:7px}
- .density-compact .sidebar-notice-progress{margin:9px 0 6px}
- .density-compact .sidebar-account{padding-top:11px}
+
+/* Information-dense composition with the original comfortable typography and width. */
+.overview-top-grid{display:grid;grid-template-columns:minmax(0,2.05fr) minmax(255px,.9fr);gap:17px;align-items:stretch}
+.overview-top-grid>div{min-width:0}
+.overview-top-grid>div>.section{margin-bottom:0}
+.overview-top-grid .goals-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.overview-top-grid .goal-card{min-height:156px}
+.overview-top-grid .goal-card h3{margin-top:13px}
+.release-gate{display:flex;flex-direction:column;min-height:100%;padding:22px 24px;border:1px solid #e4e9f4;background:linear-gradient(145deg,#fff 20%,#f7f8ff);border-radius:13px;box-shadow:var(--shadow)}
+.release-gate .gate-date{font-size:34px;font-weight:820;line-height:1.2;color:#4b5bc0;letter-spacing:-1.4px;margin:10px 0 9px}
+.release-gate h2{font-size:18px;line-height:1.35;letter-spacing:-.35px;margin:0;color:#2b3450}
+.release-gate p{color:#8d98aa;font-size:11.5px;line-height:1.55;margin:8px 0 15px}
+.gate-upcoming{list-style:none;padding:13px 0;margin:0 0 18px;border-top:1px solid #e9edf7;display:flex;flex-direction:column;gap:12px}
+.gate-upcoming li{display:flex;gap:12px;align-items:baseline;font-size:11px;color:#7c89a0}
+.gate-upcoming b{font-size:11px;color:#5161b8;white-space:nowrap}
+.gate-upcoming span{line-height:1.35}
+.release-gate .button{margin-top:auto;align-self:flex-start}
+.overview-middle-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px;align-items:stretch;margin-top:22px}
+.overview-middle-grid>.section{margin-bottom:0;min-width:0;height:100%}
+.overview-middle-grid .pace-card{padding:20px}
+.overview-middle-grid .pace-heading h2{font-size:18px}
+.overview-middle-grid .pace-heading p{max-width:310px}
+.overview-middle-grid .pace-main{gap:15px}
+.overview-middle-grid .pace-metrics{min-width:125px}
+.overview-middle-grid .pace-foot{gap:10px;flex-wrap:wrap}
+.overview-middle-grid .focus-row{padding:10px 2px}
+.overview-bottom-link{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-top:17px;padding:14px 18px;background:#fff;border:1px solid #e7ebf4;border-radius:11px}
+.overview-bottom-link span{display:flex;align-items:center;gap:9px;font-size:11.5px;color:#687794}
+.overview-bottom-link svg{width:15px;height:15px}
+.insights-intro{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 21px;background:#fff;border:1px solid #e4e9f4;border-radius:13px}
+.insights-intro h2{font-size:19px;margin:0;letter-spacing:-.5px}
+.insights-intro p{font-size:11.5px;margin:7px 0 0;color:#8894a9;line-height:1.5}
+.team-roster{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.team-roster-card{border:1px solid #e5eaf3;border-radius:13px;background:#fff;text-align:left;padding:17px 18px;display:flex;flex-direction:column;gap:14px;min-width:0;transition:border-color .15s,background .15s}
+.team-roster-card:hover{border-color:#b7c2ed;background:#fcfcff}
+.team-roster-card:focus-visible{outline:3px solid #b6c0f7;outline-offset:2px}
+.team-roster-main{display:flex;align-items:flex-start;gap:12px}
+.team-roster-main .avatar{height:35px;width:35px;margin-top:2px}
+.team-roster-description{min-width:0}
+.team-roster-description h3{font-size:14px;color:#34415c;letter-spacing:-.25px;margin:0 0 5px}
+.team-roster-description p{font-size:11px;font-weight:650;color:#697894;line-height:1.45;margin:0}
+.team-roster-description small{display:block;color:#9aa6b9;font-size:10px;margin-top:6px;line-height:1.4}
+.team-roster-progress{display:flex;align-items:center;gap:24px;border-top:1px solid #edf0f5;padding-top:12px}
+.team-roster-progress>div{display:flex;flex-direction:column;gap:4px}
+.team-roster-progress strong{font-size:16px;color:#3f50ab}
+.team-roster-progress span{font-size:9.5px;color:#9ba7b8}
+.team-roster-progress .roster-arrow{margin-left:auto;color:#7383cb}
+.roster-arrow svg{width:16px;height:16px}
+.team-reassignment-note{font-size:10px;color:#9a7537;background:#fff9eb;border-radius:7px;padding:6px 9px}
+.roster-note{color:#8b98ad;font-size:10.5px;margin:11px 2px 0;line-height:1.55}
+.handoff-flow{display:flex;align-items:stretch;gap:7px;margin-top:12px}
+.handoff-step{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:5px;padding:10px 6px;background:#fff;border:1px solid #e8edf5;border-radius:8px}
+.handoff-step strong{font-size:10.5px;color:#3a4b66}
+.handoff-step small{font-size:9px;line-height:1.4;color:#98a4b7}
+.handoff-step .table-avatar{width:25px;height:25px}
+.handoff-step-arrow{align-self:center;flex-shrink:0;color:#8696b4;font-size:16px}
+@media(max-width:1250px){
+ .overview-top-grid{grid-template-columns:minmax(0,1.5fr) minmax(245px,1fr)}
+ .overview-middle-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .overview-middle-grid .pace-main{flex-wrap:wrap}
 }
-@media(max-width:900px){
- .density-compact .topbar{padding:0 14px}
- .density-compact .content-wrap{padding:17px 16px}
- .density-toggle{padding:6px}
- .density-toggle #density-label{display:none}
+@media(max-width:1050px){
+ .overview-top-grid{grid-template-columns:1fr}
+ .release-gate{min-height:unset}
+ .overview-middle-grid{grid-template-columns:1fr}
+ .overview-top-grid .goals-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-@media(max-width:600px){
- .density-compact .view-head h1{font-size:23px}
- .density-compact .goal-card{min-height:unset}
- .density-compact .daily-columns{gap:15px}
+@media(max-width:760px){
+ .team-roster{grid-template-columns:1fr}
+ .insights-intro,.overview-bottom-link{flex-wrap:wrap}
+ .handoff-flow{flex-wrap:wrap}
+ .handoff-step-arrow{display:none}
+ .handoff-step{min-width:120px}
+}
+@media(max-width:520px){
+ .overview-top-grid .goals-grid{grid-template-columns:1fr}
+ .overview-top-grid .goal-card{min-height:0}
+ .release-gate{padding:18px}
+ .team-roster-progress{gap:14px}
 }
