@@ -24,11 +24,28 @@ The static `snapshot.js` includes a November 3, 2026 snapshot of task titles, as
 
 Keep the public dashboard root available if desired, but create a Cloudflare Zero Trust **Access application** protecting the **exact dashboard hostname with path `/api/*`** (and protect any alternate `workers.dev` / preview URLs that serve the same private API). Create an allow policy for the authorized teammates and TA. Test incognito and confirm an unauthenticated user cannot access `/api/overview`.
 
-In the Cloudflare Worker settings, add the following environment variables:
+### Public Access configuration (persisted across deploys)
 
-- `ACCESS_TEAM_DOMAIN`: your Access team domain such as `yourteam.cloudflareaccess.com` (no `https://`).
-- `ACCESS_AUD`: the **Application Audience (AUD) tag** from the Access application.
-- `GITHUB_TOKEN`: **secret**, with read-only access to `EdishAdventure/SOEN341-2026-Team01`.
+**Important:** The two nonsecret Access verification values are now declared in `wrangler.toml` under `[vars]`:
+
+- `ACCESS_TEAM_DOMAIN`: your Zero Trust team domain (`.cloudflareaccess.com`).
+- `ACCESS_AUD`: your application Audience (AUD) tag.
+
+They match the Access application configured on November 3, 2026 and will be re-applied on every Cloudflare Git deployment. If you replace the Access application or team domain, update `wrangler.toml` in GitHub accordingly. **Do not rely on editing these two plain-text variables only in the Cloudflare dashboard**, since `wrangler deploy` overwrites ordinary dashboard variables not committed in Wrangler. The Access audience and team-domain identifiers are not credentials.
+
+**Encrypted secrets remain configured only in the Cloudflare Worker dashboard:**
+
+- `GITHUB_TOKEN`: **Secret**, with read-only access to `EdishAdventure/SOEN341-2026-Team01`.
+- `GITHUB_PROJECTS_TOKEN`: optional **Secret** for the user-owned Project V2 board (see below).
+
+Never commit the GitHub token values to `wrangler.toml`, frontend files, or GitHub Actions.
+
+### Diagnose a sync regression after deployment
+
+1. If the dashboard switches to **GitHub snapshot** and the API reports `Cloudflare Access verification is not configured`, check that the latest deployment includes both `[vars]` entries in `wrangler.toml`; redeploy `main` if needed.
+2. A `Cloudflare Access login required` response means the Worker received the two values, but no valid Access JWT was provided. Authenticate through the protected `/api/overview` URL, or confirm Cloudflare Access is enforcing the intended `/api/*` route.
+3. If `GitHub token is not configured` appears **after successful Access authentication**, check whether `GITHUB_TOKEN` still exists as a Cloudflare Worker **Secret**; do not send its value to anyone.
+4. An authenticated JSON payload containing `items` and `source: "live"` means synchronization works. Refresh the dashboard page and click **Sync now**.
 
 The API validates the **Cloudflare Access JWT signature and audience** independently. With `ACCESS_TEAM_DOMAIN` or `ACCESS_AUD` unset, `/api/overview` intentionally refuses to serve private data.
 
