@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 
 const config = readFileSync(new URL('../wrangler.toml',import.meta.url),'utf8');
 function getVar(name) {
-  const section = config.match(/^\[vars\]\s*\n([\s\S]*?)(?=^\[|$)/m)?.[1]||'';
+  const section = config.split(/^\[vars\]\s*$/m)[1]?.split(/^\[/m)[0]||'';
   return section.match(new RegExp('^'+name+'\\s*=\\s*"([^"]+)"','m'))?.[1]||null;
 }
 
