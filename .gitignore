@@ -1,0 +1,11 @@
+# Local/deployment secrets
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+.wrangler/
+node_modules/
+.DS_Store
+*.log
+dist/
