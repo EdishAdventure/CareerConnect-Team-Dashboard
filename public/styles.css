@@ -186,3 +186,25 @@ button.timeline-card:hover{border-color:#c5cdec;background:#f9faff}
 /* Prevent long task titles from forcing the focus grid wider than a phone. */
 .focus-grid > .panel{min-width:0;max-width:100%}
 @media(max-width:1000px){.focus-grid{grid-template-columns:minmax(0,1fr)}}
+/* Sprint 3 task-update affordances: links open GitHub, the dashboard remains read-only. */
+.progress-action{display:inline-flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap;color:#4658cb;text-decoration:none;font-size:10.5px;font-weight:760;background:#f1f3ff;border:1px solid #e0e6ff;padding:7px 10px;border-radius:8px;transition:background .15s,border-color .15s}
+.progress-action:hover,.progress-action:focus-visible{background:#e7eaff;border-color:#adb9fa;color:#384ba8}
+.progress-action svg{height:13px;width:13px}
+.issue-table td:last-child{padding-right:18px}
+.issue-table tr[data-open]:focus-visible{outline:2px solid #6574df;outline-offset:-2px}
+.update-guidance{display:flex;align-items:center;gap:12px;background:#f6f8ff;border:1px solid #e0e7fb;border-radius:12px;padding:12px 15px;color:#5465ad}
+.update-guidance>svg{height:19px;width:19px;flex-shrink:0}
+.update-guidance p{font-size:11px;line-height:1.55;flex:1;margin:0;color:#5c6784}
+.update-guidance strong{color:#354565}
+.focus-row-linked{cursor:default}
+.focus-row-linked:hover{background:#f8f9fc}
+.focus-row-main{border:0;padding:0;background:transparent;display:flex;gap:12px;align-items:center;flex:1;min-width:0;text-align:left}
+.focus-row-main:hover .focus-text b{color:#4859ce}
+.focus-row-linked .progress-action{flex-shrink:0;margin-right:5px}
+.daily-goals li:before{border-radius:50%;background:#929fd7;border:0;width:6px;height:6px;left:2px;top:7px}
+.daily-task-main{min-width:0;display:flex;align-items:center;gap:10px;flex:1;text-align:left;background:transparent;border:0;padding:0;cursor:pointer}
+.daily-task-main>span:last-child{min-width:0}
+.daily-task .progress-action{margin-left:auto;flex-shrink:0}
+.daily-empty a{color:#4658cb;font-weight:700;text-decoration:none}
+.daily-empty a:hover{text-decoration:underline}
+@media(max-width:800px){.update-guidance{flex-wrap:wrap}.update-guidance .progress-action{margin-left:30px}.focus-row-linked{gap:5px}.daily-task{flex-wrap:wrap}.daily-task .progress-action{margin-left:37px}}
