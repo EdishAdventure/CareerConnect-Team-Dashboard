@@ -40,3 +40,10 @@ test('private progress API fails closed when Access configuration is absent', as
   assert.match(body.error,/Access verification is not configured/);
   assert.equal(body.items,undefined);
 });
+
+test('dashboard completion does not parse acceptance-test body evidence fields', async()=>{
+  const {readFileSync}=await import('node:fs');
+  const source=readFileSync(new URL('../worker.js',import.meta.url),'utf8');
+  assert.doesNotMatch(source,/function executionStatus\(/);
+  assert.doesNotMatch(source,/execution:executionStatus\(/);
+});

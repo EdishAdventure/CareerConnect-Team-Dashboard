@@ -72,3 +72,20 @@ test('HTML imports ownership helpers before main app',()=>{
   assert.doesNotMatch(html,/density-compact/);
   assert.doesNotMatch(html,/id="density-toggle"/);
 });
+
+test('completion follows issue closure rather than acceptance evidence',()=>{
+  assert.equal(own.isComplete({state:'closed',kind:'acceptance',execution:'NOT RUN'}),true);
+  assert.equal(own.isComplete({state:'closed',kind:'acceptance'}),true);
+  assert.equal(own.isComplete({state:'closed',kind:'task'}),true);
+  assert.equal(own.isComplete({state:'open',kind:'acceptance',execution:'PASS'}),false);
+  assert.equal(own.isComplete({state:'open',boardStatus:'Done'}),false);
+});
+
+test('live issue closure is used even when no execution status is included',()=>{
+  const merged=own.mergeSnapshot(snapshot,{
+    items:[{number:173,state:'closed',closedAt:'2026-11-13T17:41:29Z',assignees:['mzllo']}]
+  });
+  const issue=merged.items.find(i=>i.number===173);
+  assert.equal(issue.state,'closed');
+  assert.equal(own.isComplete(issue),true);
+});

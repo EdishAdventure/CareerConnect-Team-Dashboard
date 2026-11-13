@@ -11,12 +11,12 @@ A lightweight **Sprint 3 command center** for SOEN 341 Team 01, managed separate
 - Four official Sprint 3 outcomes on the Overview, with expandable detail
 - Daily roadmap (November 3–16) with planned focus bullets and direct links to update due tasks on GitHub
 - A **My Work** view for Jiaju, Chloe, Brandon, Maria, Kayla and Annik, with visible **Update in GitHub** links
-- Team responsibility cards with **only up-to-date remaining story points**, calculated from live task assignments and verified completion (no historical comparisons or transfer notices)
+- Team responsibility cards with **only up-to-date remaining story points**, calculated from live task assignments and issue closure (no historical comparisons or transfer notices)
 - Explicit AI and recruiter-profile handoff sequences, with task-owner links to GitHub
 - Dedicated **Insights** page for detailed metrics, workstreams, release gates, and GitHub PR activity
 - Team responsibilities and expandable collaboration handoffs
-- Schedule health comparing planned vs. closed and verified work
-- Workstreams, issue deep links, PR/CI health, and acceptance-test evidence
+- Schedule health comparing planned vs. closed GitHub issues
+- Workstreams, issue deep links, PR/CI health, and acceptance-test issue status
 - Read-only GitHub sync via Cloudflare Worker; manual sync and 10-minute polling
 - Optional Project V2 board status support via `GITHUB_PROJECTS_TOKEN` with `read:project`
 
@@ -57,13 +57,13 @@ The dashboard uses the original comfortable typography, sidebar and content widt
 
 ## Team workflow
 
-GitHub is the source of truth. Everyone updates issues and PRs in the CareerConnect repository. The dashboard provides a read-only view of what is due, assigned, verified, and blocked. Completed acceptance tests require recorded evidence; closing a task alone is not equivalent to a passed acceptance test.
+GitHub is the source of truth. Everyone updates issues and PRs in the CareerConnect repository. The dashboard provides a read-only view of what is due, assigned, closed, and blocked. **Any closed GitHub issue counts as completed in the dashboard, including acceptance-test issues.** GitHub Project status remains a separate workflow field. The dashboard does not require screenshot links, an execution result token, or other evidence metadata to recognize completion.
 
 ## Updating progress
 
 1. Open **My Work**, select your name, then click **Update** on the assigned task. This opens its actual GitHub issue.
-2. Set the GitHub Project column to Ready / In Progress / In Review, create the PR and link it to the issue. Close the issue only when the change is reviewed and verified.
-3. For acceptance tests, record the actual PASS / FAIL / BLOCKED result, tester, date and evidence on the issue. A prepared specification does **not** count as PASS.
+2. Set the GitHub Project column to Ready / In Progress / In Review, create the PR and link it to the issue. Close the issue after the team accepts the deliverable.
+3. For acceptance-test issues, prepare and run the required tests, then close the issue when the team considers that work complete. The dashboard counts this closure without requiring a separate `PASS` value or evidence attachment. This does not waive course-required acceptance tests or AI usage documentation.
 4. Return to the dashboard and click **Sync now**. Issue closures sync with the existing read-only repository token; intermediate Project columns require optional Projects permissions.
 
 The daily focus bullets are **proposed milestones, not clickable completion checkboxes**. Statuses are not editable from the dashboard, by design.

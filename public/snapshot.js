@@ -100,8 +100,7 @@ const createItem=(number,title,owner,kind,group,due,closed=false,priority='P0')=
   number,title,owner,kind,group,due,priority,state:closed?'closed':'open',
   url:`https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/${number}`,
   labels:[kind==='story'?'user-story':kind==='acceptance'?'acceptance-test':'task','sprint-3',`priority:${priority.toLowerCase()}`],
-  boardStatus:null, closedAt:closed?'2026-10-27T12:00:00-04:00':null, updatedAt:'2026-11-03T12:10:00-05:00',
-  execution:kind==='acceptance'?'NOT RUN':null
+  boardStatus:null, closedAt:closed?'2026-10-27T12:00:00-04:00':null, updatedAt:'2026-11-03T12:10:00-05:00'
 });
 window.SPRINT_SNAPSHOT = {
   capturedAt:'2026-11-03T15:43:00-05:00',
@@ -144,6 +143,6 @@ window.SPRINT_SNAPSHOT = {
     createItem(171,'[TASK-81] Repeatable demo fixtures and end-to-end QA walkthrough','EdishAdventure','task','delivery','Nov 14'),
     createItem(172,'[TASK-82] Finalize logs, report, minutes and demo','EdishAdventure','task','delivery','Nov 15')
   ],
-  prs:[], ci:null, boardAvailable:false, carryoverTests:[{number:107,state:'open',execution:'NOT RUN'},{number:108,state:'open',execution:'NOT RUN'}],
+  prs:[], ci:null, boardAvailable:false, carryoverTests:[{number:107,state:'open'},{number:108,state:'open'}],
   note:'Assignments and issue states are sourced from GitHub on Nov 3. Board statuses were not independently verified.'
 };

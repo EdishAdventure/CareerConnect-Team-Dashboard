@@ -73,7 +73,7 @@ To enable this **optional** feature:
 4. Re-deploy if prompted, then sign in to the protected API and click **Sync now**. The green sync notice should say **GitHub Project statuses included**.
 5. If the board returns *Project Status unavailable*, GitHub may be redacting linked private issue content from the project-only token. Keep the existing task sync operational; use **Open GitHub Project** to see statuses manually. Do not grant broad `repo` permissions just to remove the warning without a separate security review.
 
-The Worker uses `GITHUB_PROJECTS_TOKEN` **only for the optional board query**; it continues to use `GITHUB_TOKEN` for private repository issues. GitHub Project status is metadata, not proof of feature completion. Only completed GitHub issues (and actual PASS execution evidence for acceptance tests) count toward verified progress. A missing board status is displayed as unavailable, never guessed.
+The Worker uses `GITHUB_PROJECTS_TOKEN` **only for the optional board query**; it continues to use `GITHUB_TOKEN` for private repository issues. GitHub Project status is metadata, not proof of feature completion. All closed GitHub issues, including acceptance-test issues, count toward completed progress. No separate evidence check is used. The board's Project Status remains distinct from GitHub issue open/closed state. A missing board status is displayed as unavailable, never guessed.
 
 ## 4. Verify live syncing
 
@@ -82,9 +82,9 @@ The Worker uses `GITHUB_PROJECTS_TOKEN` **only for the optional board query**; i
 3. Check that the source indicator changes from *GitHub snapshot* to *Live GitHub*, and observe the last sync time.
 4. Update a test issue on GitHub and refresh. Use a non-sensitive issue or reversible status change when testing.
 5. Verify the dashboard shows new issue status and accurate planned-vs-actual metrics.
-6. Acceptance tests count as completed only with an explicitly recorded `PASS` in their execution record.
+6. Close an acceptance-test issue in GitHub and sync again. It counts as completed based on the issue's `closed` state; no `PASS` token or evidence link is parsed.
 
-The site refreshes every 10 minutes while open. Sync is **read-only**: teammates still update GitHub Issues, Project status, PRs, and acceptance evidence in GitHub.
+The site refreshes every 10 minutes while open. Sync is **read-only**: teammates still update GitHub Issues, Project status, and PRs in GitHub.
 
 ## Troubleshooting
 
