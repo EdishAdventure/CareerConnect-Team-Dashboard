@@ -10,6 +10,7 @@ function resolveLeads(items,storyNumbers,fallback){
   if(!matches.length)return fallback?[fallback]:[];
   return [...new Set(matches.map(i=>i.owner).filter(Boolean))];
 }
+function isComplete(issue){return issue?.state==='closed';}
 function mergeSnapshot(snapshot,payload){
   if(!payload || !Array.isArray(payload.items))throw new Error('Invalid live sync response');
   const next=JSON.parse(JSON.stringify(snapshot));
@@ -26,7 +27,6 @@ function mergeSnapshot(snapshot,payload){
     issue.updatedAt=current.updatedAt??issue.updatedAt;
     issue.closedAt=current.closedAt??null;
     issue.boardStatus=current.boardStatus??null;
-    issue.execution=current.execution??issue.execution;
     if(current.due)issue.due=current.due;
   }
   next.carryoverTests=payload.carryoverTests??next.carryoverTests??[];
@@ -38,5 +38,5 @@ function mergeSnapshot(snapshot,payload){
   next.source='live';
   return next;
 }
-root.CareerConnectOwnership=Object.freeze({resolveLead,resolveLeads,mergeSnapshot});
+root.CareerConnectOwnership=Object.freeze({resolveLead,resolveLeads,isComplete,mergeSnapshot});
 })(typeof window!=='undefined'?window:globalThis);
