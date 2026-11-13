@@ -143,14 +143,6 @@ async function projectStatuses(token) {
     : {statuses:null,reason:'project_items_unavailable'};
 }
 
-function executionStatus(issue) {
-  if (!(issue.labels || []).some(x => x.name === 'acceptance-test') && ![107,108].includes(issue.number)) return null;
-  const body = issue.body || '';
-  const section = body.split(/## Execution Record/i)[1]?.split(/\n## /)[0] || '';
-  const matched = section.match(/(?:\*\*)?(?:Execution status|Status)(?:\*\*)?\s*:\s*(?:\*\*)?\s*(PASS|FAIL|BLOCKED|NOT RUN)\b/i);
-  return matched?.[1]?.toUpperCase() || 'NOT RUN';
-}
-
 function dueDate(issue) {
   const match = (issue.body || '').match(/(?:Internal due|Target)(?: date)?\s*:?\s*(?:\*\*)?\s*(Nov(?:ember)?\s+\d{1,2})(?:,?\s*2026)?/i);
   if (!match) return null;
@@ -176,11 +168,11 @@ async function dashboard(token, projectsToken) {
       labels:(i.labels || []).map(l => l.name).filter(Boolean),
       updatedAt:i.updated_at, closedAt:i.closed_at,
       boardStatus:board.statuses?.get(i.number) || null,
-      execution:executionStatus(i), due:dueDate(i)
+      due:dueDate(i)
     })),
     carryoverTests:[107,108].map(number => {
       const i = issues.find(x => x.number === number);
-      return {number, state:i?.state || 'unknown', execution:i ? executionStatus(i) : 'NOT RUN',
+      return {number, state:i?.state || 'unknown',
         url:i?.html_url || 'https://github.com/' + FULL + '/issues/' + number};
     }),
     prs:prs.slice(0, 15).map(p => ({number:p.number, title:p.title, url:p.html_url,
