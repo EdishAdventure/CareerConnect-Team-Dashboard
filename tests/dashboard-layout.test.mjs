@@ -29,8 +29,8 @@ test('all and only 20 Sprint 4 child issues have estimates and correct one-paren
   assert.deepEqual(Object.keys(config.taskSP).map(Number).sort((a,b)=>a-b),ids.sort((a,b)=>a-b));
   assert.equal(Object.values(config.taskSP).reduce((a,b)=>a+b,0),68);
   assert.equal(snapshot.items.length,23);
-  assert.deepEqual(snapshot.items.filter(i=>i.kind==='acceptance').map(i=>i.number).sort((a,b)=>a-b),[239,240]);
-  assert.deepEqual(snapshot.items.filter(i=>i.kind==='tracker'||i.kind==='story').map(i=>i.number).sort((a,b)=>a-b),[218,219,220]);
+  assert.deepEqual(Array.from(snapshot.items.filter(i=>i.kind==='acceptance'),i=>i.number).sort((a,b)=>a-b),[239,240]);
+  assert.deepEqual(Array.from(snapshot.items.filter(i=>i.kind==='tracker'||i.kind==='story'),i=>i.number).sort((a,b)=>a-b),[218,219,220]);
   assert.ok(snapshot.items.every(i=>i.state==='open'));
 });
 
