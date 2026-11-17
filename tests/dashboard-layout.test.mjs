@@ -12,60 +12,80 @@ const app=readFileSync(new URL('public/app.js',base),'utf8');
 const html=readFileSync(new URL('public/index.html',base),'utf8');
 const css=readFileSync(new URL('public/styles.css',base),'utf8');
 
-test('approved baseline contains six members with exactly 89 story points',()=>{
+test('Sprint 4 baseline has six owners with 68 unique child story points',()=>{
+  assert.equal(config.deadline,'2026-11-30');
+  assert.equal(config.freeze,'2026-11-25');
   assert.equal(Object.keys(config.baselineSP).length,6);
-  assert.equal(Object.values(config.baselineSP).reduce((a,b)=>a+b,0),89);
+  assert.equal(Object.values(config.baselineSP).reduce((a,b)=>a+b,0),68);
   assert.deepEqual(Object.entries(config.baselineSP).sort(([a],[b])=>a.localeCompare(b)),
-    Object.entries({EdishAdventure:19,ElSnoozer:17,bthorng:17,mzllo:13,mariaacelena:10,KaylaKOUM:13}).sort(([a],[b])=>a.localeCompare(b)));
+    Object.entries({EdishAdventure:12,ElSnoozer:11,bthorng:12,mzllo:11,mariaacelena:11,KaylaKOUM:11}).sort(([a],[b])=>a.localeCompare(b)));
 });
 
-test('all and only 27 approved remaining child tasks have a story-point estimate',()=>{
-  const allTaskIds=Array.from(config.groups).flatMap(group=>Array.from(group.tasks));
-  assert.equal(allTaskIds.length,27);
-  assert.equal(new Set(allTaskIds).size,27);
-  assert.deepEqual(Object.keys(config.taskSP).map(Number).sort((a,b)=>a-b),allTaskIds.sort((a,b)=>a-b));
-  assert.equal(Object.values(config.taskSP).reduce((a,b)=>a+b,0),89);
+test('all and only 20 Sprint 4 child issues have estimates and correct one-parent grouping',()=>{
+  const ids=Array.from(config.groups).flatMap(group=>Array.from(group.tasks));
+  assert.equal(config.groups.length,5);
+  assert.equal(ids.length,20);
+  assert.equal(new Set(ids).size,20);
+  assert.deepEqual(Object.keys(config.taskSP).map(Number).sort((a,b)=>a-b),ids.sort((a,b)=>a-b));
+  assert.equal(Object.values(config.taskSP).reduce((a,b)=>a+b,0),68);
+  assert.equal(snapshot.items.length,23);
+  assert.deepEqual(Array.from(snapshot.items.filter(i=>i.kind==='acceptance'),i=>i.number).sort((a,b)=>a-b),[239,240]);
+  assert.deepEqual(Array.from(snapshot.items.filter(i=>i.kind==='tracker'||i.kind==='story'),i=>i.number).sort((a,b)=>a-b),[218,219,220]);
+  assert.ok(snapshot.items.every(i=>i.state==='open'));
 });
 
-test('task SP match the six initial allocation totals',()=>{
+test('Sprint 4 task points match individual planned ownership exactly',()=>{
   for(const [login,estimate] of Object.entries(config.baselineSP)){
-    const assigned=snapshot.items.filter(i=>i.owner===login && Object.hasOwn(config.taskSP,i.number));
-    assert.equal(assigned.reduce((sum,i)=>sum+config.taskSP[i.number],0),estimate,
-      'planned allocation mismatch for '+login);
+    const mine=snapshot.items.filter(i=>i.owner===login && Object.hasOwn(config.taskSP,i.number));
+    assert.equal(mine.reduce((sum,i)=>sum+config.taskSP[i.number],0),estimate,
+      'planned assignment mismatch: '+login);
   }
 });
 
-test('correct AI and recruiter handoff chains are linked to their real owners',()=>{
-  const flows=Object.fromEntries(config.collaboration.map(x=>[x.id,x]));
-  const loginForStep=step=>step.task?snapshot.items.find(i=>i.number===step.task)?.owner:step.login;
-  assert.deepEqual(Array.from(flows.ai.steps,loginForStep),['ElSnoozer','EdishAdventure','KaylaKOUM']);
-  assert.deepEqual(Array.from(flows.rec.steps,loginForStep),['mzllo','ElSnoozer','EdishAdventure']);
-  assert.equal(flows.ai.steps[1].task,167);
-  assert.equal(flows.rec.steps[2].task,169);
+test('daily roadmap spans Nov 17–30 with no Sprint 3 dates',()=>{
+  assert.deepEqual(Object.keys(config.dailyPlan).map(Number),Array.from({length:14},(_,i)=>i+17));
+  assert.equal(config.milestones.at(-1).iso,'2026-11-30');
+  assert.ok(config.milestones.some(x=>x.iso==='2026-11-25' && /freeze/i.test(x.title)));
+  assert.match(html,/Sprint 04/);
+  assert.match(html,/SPRINT 4/);
+  assert.match(app,/NOVEMBER 17–30/);
+  assert.match(app,/Feature freeze Nov 25/);
+  assert.doesNotMatch(html,/Sprint 3|Nov 16/);
+  assert.doesNotMatch(app,/Sprint 3|Nov 3–16|NOVEMBER 3–16|Nov 16/);
 });
 
-test('insights is a separate navigation view while overview stays focused',()=>{
+test('posting, matching, static and release handoffs resolve to assigned owners',()=>{
+  const flows=Object.fromEntries(config.collaboration.map(x=>[x.id,x]));
+  const who=step=>step.task?snapshot.items.find(i=>i.number===step.task)?.owner:step.login;
+  assert.deepEqual(Array.from(flows.posting.steps,who),['mzllo','ElSnoozer','mzllo','KaylaKOUM']);
+  assert.deepEqual(Array.from(flows.matching.steps,who),['EdishAdventure','bthorng','EdishAdventure','mariaacelena']);
+  assert.deepEqual(Array.from(flows.quality.steps,who),['mariaacelena','bthorng','mariaacelena']);
+});
+
+test('quality view contains new acceptance tests, backend CI and six-member documentation',()=>{
+  const q=app.slice(app.indexOf('function renderQuality()'),app.indexOf('function renderTimeline()'));
+  assert.match(q,/239/);
+  assert.match(q,/240/);
+  assert.match(q,/233/);
+  assert.match(q,/236/);
+  assert.match(q,/Closure is not proof of PASS/);
+  assert.doesNotMatch(q,/US-04 carryover|#107 and #108/);
+});
+
+test('insights is separate, overview uncluttered and layout unchanged',()=>{
   assert.match(html,/data-view="insights"/);
   assert.match(app,/function renderInsights\(\)/);
   assert.match(app,/insights:renderInsights/);
   assert.match(app,/function renderOverview\(\)/);
   assert.match(app,/overview-top-grid/);
   assert.match(app,/overview-middle-grid/);
-  assert.match(app,/function focusPanel\(\)/);
-});
-
-test('comfortable width restored and compact density overrides removed',()=>{
-  assert.doesNotMatch(html,/density-compact/);
-  assert.doesNotMatch(html,/density-toggle/);
+  assert.doesNotMatch(html,/density-compact|density-toggle/);
   assert.doesNotMatch(css,/\.density-compact/);
-  assert.match(css,/\.overview-top-grid/);
-  assert.match(css,/\.overview-middle-grid/);
 });
 
-
-test('Team view presents only current remaining story points, without outdated allocations',()=>{
+test('Team shows remaining assigned SP rather than historical baseline',()=>{
   const section=app.slice(app.indexOf('function renderTeam()'),app.indexOf('function renderQuality()'));
   assert.match(section,/remainingTotal/);
   assert.match(section,/remaining.*SP/);
-  assert.doesNotMatch(section,/baselineTotal|currentAllocation|Nov 3 allocation|team-reassignment-note|baselineSP/);
+  assert.doesNotMatch(section,/baselineTotal|currentAllocation|team-reassignment-note|baselineSP/);
 });

@@ -1,6 +1,6 @@
 # GitHub live sync & Cloudflare deployment
 
-This project is a **read-only** Sprint 3 dashboard. The GitHub repository containing this code is public by owner choice. The **original CareerConnect repository and its issue details are private**, so live API access must be protected.
+This project is a **read-only** Sprint 4 dashboard (November 17–30, 2026). The GitHub repository containing this code is public by owner choice. The **original CareerConnect repository and its issue details are private**, so live API access must be protected.
 
 ## 1. GitHub source (already added)
 
@@ -9,7 +9,7 @@ This project is a **read-only** Sprint 3 dashboard. The GitHub repository contai
 - Cloudflare configuration: `wrangler.toml`
 - No GitHub token or secret is included in source.
 
-The static `snapshot.js` includes a November 3, 2026 snapshot of task titles, assignees, and planning details. **This is public once merged into this public repo**, as explicitly authorized. New private issue changes flow only through the authenticated API after deployment.
+The static `snapshot.js` includes a November 17, 2026 **Sprint 4 planning baseline** for the 23 new issues (#218–#240), including their six owners, provisional 68 unique child SP, and internal dates. **This is public once merged into this public repo**, as explicitly authorized. New private issue changes flow only through the authenticated API after deployment.
 
 ## 2. Connect to Cloudflare
 
@@ -73,7 +73,10 @@ To enable this **optional** feature:
 4. Re-deploy if prompted, then sign in to the protected API and click **Sync now**. The green sync notice should say **GitHub Project statuses included**.
 5. If the board returns *Project Status unavailable*, GitHub may be redacting linked private issue content from the project-only token. Keep the existing task sync operational; use **Open GitHub Project** to see statuses manually. Do not grant broad `repo` permissions just to remove the warning without a separate security review.
 
-The Worker uses `GITHUB_PROJECTS_TOKEN` **only for the optional board query**; it continues to use `GITHUB_TOKEN` for private repository issues. GitHub Project status is metadata, not proof of feature completion. All closed GitHub issues, including acceptance-test issues, count toward completed progress. No separate evidence check is used. The board's Project Status remains distinct from GitHub issue open/closed state. A missing board status is displayed as unavailable, never guessed.
+The Worker synchronizes **only Sprint 4 issues #218–#240** from the private repository. Earlier Project cards are archived but retained as historical GitHub issues. The Worker uses `GITHUB_PROJECTS_TOKEN` **only for the optional board query**; it continues to use `GITHUB_TOKEN` for private repository issues. GitHub Project status is metadata, not proof of feature completion. Sprint 4 acceptance issues #239 and #240 must contain actual execution outcomes and evidence; the dashboard never infers PASS from closing an issue. All closed GitHub issues, including acceptance-test issues, count toward completed progress. No separate evidence check is used. The board's Project Status remains distinct from GitHub issue open/closed state. A missing board status is displayed as unavailable, never guessed.
+
+
+**Sprint 4 deployment verification:** After merging, confirm the site displays **Sprint 04**, feature freeze **Nov 25**, deadline **Nov 30**, five workstreams, 20 child issues / 68 SP, and that a signed-in team member can sync issue #220. Publishing the GitHub branch does not alone establish that the workers.dev hostname has been deployed.
 
 ## 4. Verify live syncing
 
