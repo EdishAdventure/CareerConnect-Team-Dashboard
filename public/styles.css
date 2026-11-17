@@ -298,8 +298,61 @@ button.timeline-card:hover{border-color:#c5cdec;background:#f9faff}
  .team-roster-progress .roster-arrow{display:none}
 }
 
-/* Sprint 3 archive / active Sprint 4 navigation, shared by both views. */
-.sprint-switch{display:flex;gap:6px;padding:0 16px 17px;align-items:stretch;}
-.sprint-switch a{display:flex;align-items:center;justify-content:center;flex:1;min-height:34px;padding:6px 8px;border:1px solid rgba(220,229,250,.19);border-radius:8px;color:#c3cde3;text-decoration:none;font-size:11px;font-weight:650;line-height:1.25;text-align:center;transition:background .16s ease,color .16s ease;}
-.sprint-switch a:hover,.sprint-switch a:focus-visible{background:rgba(210,224,255,.12);color:#fff;}
-.sprint-switch a.active{background:rgba(210,224,255,.17);border-color:rgba(210,224,255,.45);color:#fff;}
+
+/* One accessible workspace dropdown for both the live and archived sprints. */
+.sprint-picker{position:relative;isolation:isolate;z-index:9;margin:0 8px 28px}
+.sprint-picker > summary.workspace-select{margin:0;cursor:pointer;list-style:none;user-select:none;transition:border-color .16s ease,background .16s ease}
+.sprint-picker > summary.workspace-select::-webkit-details-marker{display:none}
+.sprint-picker > summary.workspace-select::marker{content:""}
+.sprint-picker > summary.workspace-select:hover,
+.sprint-picker[open] > summary.workspace-select{background:#2c3954;border-color:#566585}
+.sprint-picker > summary.workspace-select:focus-visible{outline:2px solid #b8c3ff;outline-offset:3px}
+.sprint-picker .workspace-chevron{transition:transform .16s ease;font-size:16px;line-height:1}
+.sprint-picker[open] .workspace-chevron{transform:rotate(180deg)}
+.sprint-picker-menu{position:absolute;z-index:30;top:calc(100% + 7px);left:0;right:0;padding:6px;background:#22304a;border:1px solid #465774;border-radius:11px;box-shadow:0 17px 35px #0b132a70;display:grid;gap:3px}
+.sprint-picker-menu a{display:flex;flex-direction:column;gap:4px;min-width:0;padding:11px 12px;border-radius:8px;text-decoration:none;color:#dce6f8;outline-offset:-2px}
+.sprint-picker-menu a span{font-weight:750;font-size:12px;line-height:1.25}
+.sprint-picker-menu a small{color:#a4b3cf;font-size:10.5px}
+.sprint-picker-menu a:hover,.sprint-picker-menu a:focus-visible{background:#3a4b6e;color:white}
+.sprint-picker-menu a:focus-visible{outline:2px solid #adbafe}
+.sprint-picker-menu a.active{background:#40527e;color:#fff}
+.sprint-picker-menu a.active small{color:#d0dcfa}
+
+/* Quality & tests: full-width panels, never narrow multi-column cards. */
+.quality-hub{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+.quality-panel{min-width:0}
+.quality-at-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.quality-at-card{display:flex;align-items:center;min-width:0;gap:12px;padding:16px;border:1px solid #e9edf6;border-radius:12px;background:#fff;color:inherit;text-align:left;cursor:pointer;transition:background .15s ease,border-color .15s ease}
+.quality-at-card:hover,.quality-at-card:focus-visible{background:#f8faff;border-color:#c3cff2}
+.quality-at-card:focus-visible,.quality-task:focus-visible{outline:2px solid #758af0;outline-offset:2px}
+.quality-at-card .quality-main{flex:1;min-width:0}
+.quality-at-card .quality-main b{display:block;font-size:12px;white-space:normal;overflow-wrap:anywhere;line-height:1.45}
+.quality-at-card .quality-main small{display:block;margin-top:5px;font-size:10.5px;color:#7d8ca4}
+.quality-at-card>.avatar{flex:0 0 33px;width:33px;height:33px;font-size:10px}
+.quality-at-card .status-chip{flex:0 0 auto}
+.quality-explainer{display:flex;gap:9px;align-items:flex-start;margin-top:14px;padding:12px 14px;background:#f5f7fe;border-radius:9px;font-size:11px;line-height:1.6;color:#627299}
+.quality-explainer svg{width:16px;height:16px;flex:0 0 16px;margin-top:1px;color:#6174c9}
+.quality-explainer p{margin:0}
+.quality-activities-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:stretch}
+.quality-group{min-width:0;display:flex;flex-direction:column;border:1px solid #e8ecf4;border-radius:12px;background:#fbfcff;padding:15px}
+.quality-group-head{display:flex;gap:9px;justify-content:space-between;align-items:flex-start;margin-bottom:9px}
+.quality-group-head h3{margin:0;font-size:12px;font-weight:780;color:#293753;line-height:1.35}
+.quality-group-head p{margin:5px 0 0;font-size:10.5px;line-height:1.5;color:#8b98af}
+.quality-group-count{flex:0 0 auto;border-radius:14px;background:#eaf0fa;padding:4px 8px;font-size:10px;font-weight:700;color:#5b6b8e;white-space:nowrap}
+.quality-task-list{display:grid;gap:0;min-width:0}
+.quality-task{display:flex;flex-direction:column;min-width:0;gap:8px;width:100%;padding:12px 2px;border:0;border-bottom:1px solid #ebeff6;background:transparent;text-align:left;cursor:pointer;color:inherit}
+.quality-task:last-child{border-bottom:none}
+.quality-task:hover{background:#f2f6ff;border-radius:6px}
+.quality-task-title{display:flex;gap:9px;align-items:flex-start;min-width:0}
+.quality-task-title>svg{width:16px;height:16px;flex:0 0 16px;margin-top:1px;color:#6879c9}
+.quality-task-copy{display:block;min-width:0;flex:1}
+.quality-task-copy strong{display:block;color:#2e3b57;font-size:11.5px;line-height:1.4;overflow-wrap:anywhere}
+.quality-task-copy small{display:block;margin-top:4px;color:#8491a8;font-size:10.5px;line-height:1.45}
+.quality-task-bottom{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-left:25px}
+.quality-task-owner{display:flex;align-items:center;min-width:0;gap:6px;color:#697894;font-size:10px}
+.quality-task-owner .avatar{width:21px;height:21px;font-size:8px;flex:0 0 21px}
+.quality-task-bottom .chip{flex:0 0 auto}
+.quality-panel .panel-title-row{flex-wrap:wrap}
+@media(max-width:1260px){.quality-activities-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:860px){.quality-activities-grid{grid-template-columns:1fr}.quality-at-list{grid-template-columns:1fr}}
+@media(max-width:480px){.quality-at-card{padding:12px}.quality-at-card .quality-main b{font-size:11px}.quality-group{padding:12px}.quality-task-bottom{margin-left:0}.sprint-picker-menu a{padding:12px}}
