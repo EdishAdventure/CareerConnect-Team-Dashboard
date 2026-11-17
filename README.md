@@ -9,7 +9,7 @@ A two-sprint **SOEN 341 Team 01 command center**: active Sprint 4 and preserved 
 ## Sprint selector and archived Sprint 3
 
 - **Sprint 04 · Active:** `/` — [open the current dashboard](https://careerconnect-team-dashboard.edwardshi.workers.dev/) with the November 17–30 roadmap and current v3 assignments.
-- **Sprint 03 · History:** `/sprint3/index.html` — [open the Sprint 3 dashboard](https://careerconnect-team-dashboard.edwardshi.workers.dev/sprint3/index.html) with its original November 3–16 roadmap, nine workstreams and 89-point planning baseline. A two-tab sidebar switcher moves between them.
+- **Sprint 03 · History:** `/sprint3/index.html` — [open the Sprint 3 dashboard](https://careerconnect-team-dashboard.edwardshi.workers.dev/sprint3/index.html) with its original November 3–16 roadmap, nine workstreams and 89-point planning baseline. The top-left Sprint 03/Sprint 04 workspace dropdown switches between them.
 - The historical view keeps the actual original Sprint 3 UI and snapshot from the pre-Sprint-4 commit. Its original 89 SP is a **historical plan**, not a claim about actual completed effort. Live API access can refresh old GitHub issue open/closed states after archive, while archived Project board states are labeled as historical.
 - The protected read-only endpoint `/api/overview?sprint=3` serves old repository issues and `/api/overview?sprint=4` (or `/api/overview`) serves current Sprint 4. Historical issues **are not** reactivated in Project #1, and Sprint 3 is excluded from Sprint 4 metrics.
 - Cloudflare Access protects both private GitHub data flows. If the live API is unavailable, each view displays a clearly labeled offline planning snapshot.
@@ -22,7 +22,7 @@ A two-sprint **SOEN 341 Team 01 command center**: active Sprint 4 and preserved 
 - **Plan v3 — 68 unique child SP:** Jiaju 12, Annik 12, Maria 12, Brandon 11, Chloe 11, Kayla 10. Parent issues are roll-ups, not extra points.
 - Four overview priorities with live lead/owner mapping, planned dates, remaining effort, and issue deep links.
 - A 14-day **November 17–30** roadmap: Nov 18 contracts, Nov 20–21 foundations, Nov 23 posting integration, Nov 24 matching integration, Nov 25 freeze, Nov 26–27 QA, Nov 28–29 audit/rehearsal, Nov 30 deadline.
-- My Work, team capacity, workstream, quality/acceptance, timeline and Insights views.
+- My Work, team capacity, workstream, quality/acceptance, timeline and Insights views. The Quality & Tests page separates full-width acceptance tests from three responsive groups (Verification, Engineering Quality, Release Readiness) covering all eight regression/release tasks.
 - Issue/PR/CI synchronization through a protected Cloudflare Worker, 10-minute polling and manual refresh.
 - Correct Sprint 4 acceptance test issues #239 (posting) and #240 (AI) displayed without falsely claiming PASS.
 - Optional GitHub Projects V2 status via a separate read-only Project token.
@@ -37,6 +37,7 @@ public/
   styles.css       Responsive styles
   snapshot.js      Sprint 4 v3 planning baseline (public by owner choice)
   app.js           Dashboard interactions and schedule model
+  sprint-picker.js Accessible top-left sprint menu behavior
   favicon.svg      Site icon
   sprint3/
     index.html     Archived Sprint 3 dashboard shell
