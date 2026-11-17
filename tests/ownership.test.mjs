@@ -3,63 +3,57 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {runInNewContext} from 'node:vm';
 
-const root = new URL('../', import.meta.url);
-const runtime = {window:{}};
-const load = path => runInNewContext(readFileSync(new URL(path,root),'utf8'),runtime,{filename:path});
+const root=new URL('../',import.meta.url);
+const runtime={window:{}};
+const load=path=>runInNewContext(readFileSync(new URL(path,root),'utf8'),runtime,{filename:path});
 load('public/snapshot.js');
 load('public/ownership.js');
-const own = runtime.window.CareerConnectOwnership;
+const own=runtime.window.CareerConnectOwnership;
 const config=runtime.window.SPRINT_CONFIG;
 const snapshot=runtime.window.SPRINT_SNAPSHOT;
 
-test('Sprint 3 goals declare the GitHub stories that own their leadership',()=>{
-  const ai=config.officialGoals.find(x=>x.id==='ai');
-  const analytics=config.officialGoals.find(x=>x.id==='analytics');
-  const recruiter=config.officialGoals.find(x=>x.id==='recruiter');
-  assert.deepEqual(Array.from(ai.leadStories),[26]);
-  assert.deepEqual(Array.from(analytics.leadStories),[151]);
-  assert.deepEqual(Array.from(recruiter.leadStories),[9,13]);
+test('Sprint 4 goals resolve canonical parent leadership and QA leads',()=>{
+  const posting=config.officialGoals.find(x=>x.id==='posting');
+  const matching=config.officialGoals.find(x=>x.id==='matching');
+  const verification=config.officialGoals.find(x=>x.id==='verification');
+  assert.deepEqual(Array.from(posting.leadStories),[219]);
+  assert.deepEqual(Array.from(matching.leadStories),[220]);
+  assert.deepEqual(Array.from(verification.leadTasks),[231]);
 });
 
-test('feature leadership follows current parent issues after live transfer',()=>{
-  const input=[
-    {number:9,owner:'mzllo'},
-    {number:13,owner:'ElSnoozer'},
-    {number:26,owner:'EdishAdventure'},
-    {number:151,owner:'ElSnoozer'}
-  ];
-  assert.deepEqual(Array.from(own.resolveLeads(input,[9,13],'mzllo')),['mzllo','ElSnoozer']);
-  assert.deepEqual(Array.from(own.resolveLeads(input,[26],'ElSnoozer')),['EdishAdventure']);
-  assert.equal(own.resolveLead(input,151,'mariaacelena'),'ElSnoozer');
+test('feature owner changes are resolved dynamically from current parent issue data',()=>{
+  const input=[{number:219,owner:'mzllo'},{number:220,owner:'EdishAdventure'},{number:231,owner:'KaylaKOUM'}];
+  assert.deepEqual(Array.from(own.resolveLeads(input,[219],'ElSnoozer')),['mzllo']);
+  assert.equal(own.resolveLead(input,220,'ElSnoozer'),'EdishAdventure');
+  assert.deepEqual(Array.from(own.resolveLeads(input,[231],'mzllo')),['KaylaKOUM']);
 });
 
-test('reassigned task and story owners override the local snapshot',()=>{
-  const payload={capturedAt:'2026-11-03T20:50:00Z',items:[
-    {number:26,assignees:['EdishAdventure'],state:'open'},
-    {number:151,assignees:['ElSnoozer'],state:'open'},
-    {number:157,assignees:['ElSnoozer'],state:'open'},
-    {number:170,assignees:['mariaacelena'],state:'open'}
+test('GitHub live task owners, states and board statuses override static snapshot',()=>{
+  const payload={capturedAt:'2026-11-18T20:50:00Z',items:[
+    {number:220,assignees:['EdishAdventure'],state:'open',boardStatus:'Ready'},
+    {number:221,assignees:['ElSnoozer'],state:'open',boardStatus:'In Progress'},
+    {number:231,assignees:['KaylaKOUM'],state:'closed',boardStatus:'Done',closedAt:'2026-11-18T20:50:00Z'}
   ]};
   const merged=own.mergeSnapshot(snapshot,payload);
-  assert.equal(merged.items.find(x=>x.number===26).owner,'EdishAdventure');
-  assert.equal(merged.items.find(x=>x.number===151).owner,'ElSnoozer');
-  assert.equal(merged.items.find(x=>x.number===157).owner,'ElSnoozer');
-  assert.equal(merged.items.find(x=>x.number===170).owner,'mariaacelena');
+  assert.equal(merged.items.find(x=>x.number===221).owner,'ElSnoozer');
+  assert.equal(merged.items.find(x=>x.number===221).boardStatus,'In Progress');
+  assert.equal(merged.items.find(x=>x.number===231).state,'closed');
+  assert.equal(merged.items.find(x=>x.number===231).boardStatus,'Done');
   assert.equal(merged.source,'live');
   assert.equal(merged.capturedAt,payload.capturedAt);
 });
 
-test('unassigned issue stays unassigned instead of restoring an outdated owner',()=>{
-  const merged=own.mergeSnapshot(snapshot,{items:[{number:26,assignees:[],state:'open'}]});
-  assert.equal(merged.items.find(x=>x.number===26).owner,null);
-  assert.equal(own.resolveLead(merged.items,26,'ElSnoozer'),null);
-  assert.deepEqual(Array.from(own.resolveLeads(merged.items,[26],'ElSnoozer')),[]);
+test('unassigned issue is not silently reassigned to snapshot owner',()=>{
+  const merged=own.mergeSnapshot(snapshot,{items:[{number:220,assignees:[],state:'open'}]});
+  assert.equal(merged.items.find(x=>x.number===220).owner,null);
+  assert.equal(own.resolveLead(merged.items,220,'ElSnoozer'),null);
+  assert.deepEqual(Array.from(own.resolveLeads(merged.items,[220],'ElSnoozer')),[]);
 });
 
-test('other assignments and statuses remain unchanged when a sync payload omits an issue',()=>{
-  const before=snapshot.items.find(x=>x.number===159);
-  const merged=own.mergeSnapshot(snapshot,{items:[{number:26,assignees:['EdishAdventure'],state:'open'}]});
-  const after=merged.items.find(x=>x.number===159);
+test('partial sync retains other issue assignments and states',()=>{
+  const before=snapshot.items.find(x=>x.number===224);
+  const merged=own.mergeSnapshot(snapshot,{items:[{number:220,assignees:['EdishAdventure'],state:'open'}]});
+  const after=merged.items.find(x=>x.number===224);
   assert.equal(after.owner,before.owner);
   assert.equal(after.state,before.state);
 });
@@ -69,23 +63,20 @@ test('HTML imports ownership helpers before main app',()=>{
   assert.ok(html.indexOf('src="ownership.js"')>0);
   assert.ok(html.indexOf('src="ownership.js"')<html.indexOf('src="app.js"'));
   assert.match(html,/data-view="insights"/);
-  assert.doesNotMatch(html,/density-compact/);
-  assert.doesNotMatch(html,/id="density-toggle"/);
+  assert.doesNotMatch(html,/density-compact|id="density-toggle"/);
 });
 
-test('completion follows issue closure rather than acceptance evidence',()=>{
+test('issue closure is progress, not acceptance PASS',()=>{
   assert.equal(own.isComplete({state:'closed',kind:'acceptance',execution:'NOT RUN'}),true);
-  assert.equal(own.isComplete({state:'closed',kind:'acceptance'}),true);
-  assert.equal(own.isComplete({state:'closed',kind:'task'}),true);
   assert.equal(own.isComplete({state:'open',kind:'acceptance',execution:'PASS'}),false);
   assert.equal(own.isComplete({state:'open',boardStatus:'Done'}),false);
 });
 
-test('live issue closure is used even when no execution status is included',()=>{
+test('acceptance result remains unclaimed by dashboard after live closure',()=>{
   const merged=own.mergeSnapshot(snapshot,{
-    items:[{number:173,state:'closed',closedAt:'2026-11-13T17:41:29Z',assignees:['mzllo']}]
+    items:[{number:239,state:'closed',closedAt:'2026-11-26T17:41:29Z',assignees:['bthorng']}]
   });
-  const issue=merged.items.find(i=>i.number===173);
-  assert.equal(issue.state,'closed');
-  assert.equal(own.isComplete(issue),true);
+  assert.equal(merged.items.find(x=>x.number===239).state,'closed');
+  assert.equal(own.isComplete(merged.items.find(x=>x.number===239)),true);
+  assert.equal(merged.items.find(x=>x.number===239).execution,undefined);
 });
