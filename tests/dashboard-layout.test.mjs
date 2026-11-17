@@ -52,7 +52,7 @@ test('active dashboard shows Sprint 4 dates and historical Sprint 3 switcher',()
   assert.match(html,/SPRINT 4/);
   assert.match(app,/NOVEMBER 17–30/);
   assert.match(app,/Feature freeze Nov 25/);
-  assert.doesNotMatch(html,/Sprint 3|Nov 16/);
+  assert.doesNotMatch(html,/Sprint 3 evaluation deadline|<strong>Sprint 03<\/strong>|sidebar-notice-big">Nov 16/);
   assert.doesNotMatch(app,/Sprint 3|Nov 3–16|NOVEMBER 3–16|Nov 16/);
 });
 
