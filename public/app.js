@@ -164,27 +164,34 @@ function renderTeam(){
 function renderQuality(){
   const tests=acceptance().sort((a,b)=>a.number-b.number);
   const closed=tests.filter(completed).length;
-  const carry=(data.carryoverTests||[]);
-  const carryClosed=carry.filter(x=>x.state==='closed').length;
+  const quality=[231,232,233,234,235,236,237,238].map(item).filter(Boolean);
+  const finished=quality.filter(completed).length;
+  const lint=item(233);
   return `${renderIntro()}
   <div class="grid-4 section">
-    <div class="kpi-card"><div class="kpi-top"><span class="kpi-label">Acceptance test issues</span><span class="kpi-icon">${icon('check')}</span></div><div class="kpi-value">${tests.length}</div><div class="kpi-foot">Sprint 4 acceptance tests remain in scope</div></div>
-    <div class="kpi-card"><div class="kpi-top"><span class="kpi-label">Acceptance issues closed</span><span class="kpi-icon">${icon('flag')}</span></div><div class="kpi-value">${closed}<small> / ${tests.length}</small></div><div class="kpi-foot">Completion follows GitHub issue state</div></div>
-    <div class="kpi-card"><div class="kpi-top"><span class="kpi-label">US-04 carryover AT</span><span class="kpi-icon">${icon('file')}</span></div><div class="kpi-value">${carryClosed}<small> / 2</small></div><div class="kpi-foot">#107 and #108 · closure only</div></div>
-    <div class="kpi-card"><div class="kpi-top"><span class="kpi-label">CI status</span><span class="kpi-icon">${icon('code')}</span></div><div class="kpi-value" style="font-size:18px;margin-top:20px">${data.ci?E((data.ci.conclusion||data.ci.status||'unknown').toUpperCase()):'Not synced'}</div><div class="kpi-foot">${data.ci?`Most recent workflow · ${friendlyDate(data.ci.updated_at)}`:'Connect GitHub for latest workflow run'}</div></div>
+    <div class="kpi-card"><div class="kpi-top"><span class="kpi-label">Sprint 4 acceptance tests</span><span class="kpi-icon">${icon('check')}</span></div><div class="kpi-value">${tests.length}</div><div class="kpi-foot">Posting v2 #239 · AI matching #240</div></div>
+    <div class="kpi-card"><div class="kpi-top"><span class="kpi-label">Acceptance issues closed</span><span class="kpi-icon">${icon('flag')}</span></div><div class="kpi-value">${closed}<small> / ${tests.length}</small></div><div class="kpi-foot">Closure is not proof of PASS</div></div>
+    <div class="kpi-card"><div class="kpi-top"><span class="kpi-label">Quality & release tasks</span><span class="kpi-icon">${icon('file')}</span></div><div class="kpi-value">${finished}<small> / ${quality.length}</small></div><div class="kpi-foot">Regression, static analysis, logs & demo</div></div>
+    <div class="kpi-card"><div class="kpi-top"><span class="kpi-label">CareerConnect CI</span><span class="kpi-icon">${icon('code')}</span></div><div class="kpi-value" style="font-size:18px;margin-top:20px">${data.ci?E((data.ci.conclusion||data.ci.status||'unknown').toUpperCase()):'Not synced'}</div><div class="kpi-foot">${data.ci?`Latest CI · ${friendlyDate(data.ci.updated_at)}`:'Connect GitHub to see CI status'}</div></div>
   </div>
   <div class="at-grid section">
-    <div class="panel"><div class="panel-title-row"><div><h2 class="panel-title">Acceptance test issue status</h2><div class="panel-subtitle">Issue closure is the progress signal; open an issue to inspect its test definition</div></div>${chip('GitHub source of truth','blue')}</div>
-      <div class="quality-list">${tests.map(i=>`<div class="quality-item" data-open="${i.number}">${avatar(i.owner)}<div class="quality-main"><b>${E(cleanTitle(i.title))}</b><small>#${i.number} · ${E(person(i.owner).name)} · ${E(C.groups.find(g=>g.key===i.group)?.id||'')}</small></div>${badgeStatus(i)}</div>`).join('')}<div class="quality-item" data-open="169">${avatar(item(169)?.owner)}<div class="quality-main"><b>US-04 carryover · #107 and #108</b><small>Acceptance test issues tracked by open/closed state</small></div>${chip(carryClosed===2?'Closed':'Open',carryClosed===2?'green':'grey')}</div></div>
+    <div class="panel">
+      <div class="panel-title-row"><div><h2 class="panel-title">Acceptance test issues</h2><div class="panel-subtitle">Open GitHub to view actual execution result, tester, commit and evidence</div></div>${chip('Actual results in issues','blue')}</div>
+      <div class="quality-list">${tests.map(i=>`<div class="quality-item" data-open="${i.number}">${avatar(i.owner)}<div class="quality-main"><b>${E(cleanTitle(i.title))}</b><small>#${i.number} · ${E(person(i.owner).name)} · ${E(C.groups.find(g=>g.key===i.group)?.id||'')}</small></div>${badgeStatus(i)}</div>`).join('')}</div>
+      <div class="mini-banner">${icon('info')}<p>These cards show GitHub issue closure, not test PASS. Executed results must be independently recorded in #239/#240 with evidence. Existing US-20 AI resume-feedback validation is tracked separately in #232.</p></div>
     </div>
-    <div class="panel"><div class="panel-title-row"><div><h2 class="panel-title">Release quality activities</h2><div class="panel-subtitle">Sprint 4 deliverables and internal checkpoints</div></div>
+    <div class="panel">
+      <div class="panel-title-row"><div><h2 class="panel-title">Regression & release quality activities</h2><div class="panel-subtitle">All Sprint 4 quality and submission obligations</div></div>
       <div class="release-list">${[
-        {icon:'code',a:'Unit tests & CI',b:'Backend and frontend checks',num:170},
-        {icon:'check',a:'Acceptance tests',b:'Prepare, review and run applicable tests; issue closure determines dashboard completion',num:169},
-        {icon:'layers',a:'End-to-end regression',b:'Recruiter/seeker workflows and demo',num:171},
-        {icon:'file',a:'Reporting & individual logs',b:'Meeting minutes, AI usage logs, 6 PDFs, team summary',num:172}
+        {icon:'check',a:'Cross-feature regression',b:'End-to-end seeker/recruiter workflows',num:231},
+        {icon:'sparkles',a:'AI resume feedback validation',b:'US-20 real-provider synthetic evidence',num:232},
+        {icon:'code',a:'Backend static analysis in CI',b:'Ruff gate and baseline',num:233},
+        {icon:'layers',a:'Maintenance & review audit',b:'Static findings + independent PR reviews',num:234},
+        {icon:'check',a:'Code review quality',b:'Test coverage, PR reviews, coding standards',num:235},
+        {icon:'file',a:'Individual AI & contribution logs',b:'Six PDFs and meeting minutes',num:236},
+        {icon:'flag',a:'Demo rehearsal & final report',b:'Synthetic fixtures and submission audit',num:238}
       ].map(x=>`<div class="release-row" data-open="${x.num}">${icon(x.icon)}<div><strong>${E(x.a)} · #${x.num}</strong><span>${E(x.b)}</span></div></div>`).join('')}</div>
-      <div class="mini-banner">${icon('info')}<p>Completion metrics use GitHub issue closure alone. Acceptance tests, automated tests, CI and required AI documentation remain part of the course deliverables; no separate screenshot or PASS-token gate is imposed by this dashboard.</p></div>
+      <div class="mini-banner">${icon('info')}<p>Ruff CI task #233: ${E(lint?.state||'unknown')}. The dashboard is read-only and never fabricates PASS, review approvals or submitted files.</p></div>
     </div>
   </div>`;
 }
