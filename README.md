@@ -1,17 +1,25 @@
 # CareerConnect — Team Dashboard
 
-A lightweight **Sprint 4 command center** for SOEN 341 Team 01, managed separately from the CareerConnect application.
+A two-sprint **SOEN 341 Team 01 command center**: active Sprint 4 and preserved Sprint 3 history, managed separately from the CareerConnect application.
 
 **Source project (private):** [EdishAdventure/SOEN341-2026-Team01](https://github.com/EdishAdventure/SOEN341-2026-Team01)  
 **Dashboard repository:** [EdishAdventure/CareerConnect-Team-Dashboard](https://github.com/EdishAdventure/CareerConnect-Team-Dashboard)  
 **Sprint deadline:** **Monday, November 30, 2026**; internal feature freeze **November 25**.
+
+## Sprint selector and archived Sprint 3
+
+- **Sprint 04 · Active:** `/` — [open the current dashboard](https://careerconnect-team-dashboard.edwardshi.workers.dev/) with the November 17–30 roadmap and current v3 assignments.
+- **Sprint 03 · History:** `/sprint3/index.html` — [open the Sprint 3 dashboard](https://careerconnect-team-dashboard.edwardshi.workers.dev/sprint3/index.html) with its original November 3–16 roadmap, nine workstreams and 89-point planning baseline. A two-tab sidebar switcher moves between them.
+- The historical view keeps the actual original Sprint 3 UI and snapshot from the pre-Sprint-4 commit. Its original 89 SP is a **historical plan**, not a claim about actual completed effort. Live API access can refresh old GitHub issue open/closed states after archive, while archived Project board states are labeled as historical.
+- The protected read-only endpoint `/api/overview?sprint=3` serves old repository issues and `/api/overview?sprint=4` (or `/api/overview`) serves current Sprint 4. Historical issues **are not** reactivated in Project #1, and Sprint 3 is excluded from Sprint 4 metrics.
+- Cloudflare Access protects both private GitHub data flows. If the live API is unavailable, each view displays a clearly labeled offline planning snapshot.
 
 ## Sprint 4 scope and dashboard features
 
 - **Deadline:** Monday, November 30, 2026; **feature freeze:** Wednesday, November 25.
 - **Five workstreams:** Job Posting v2 (#219), AI Job Matching US-25 (#220), existing-feature regression/US-20 validation, CI/static analysis/PR review, documentation and demo/release.
 - **23 canonical Sprint 4 issues:** three parents (#218–#220) and 20 child tasks/acceptance issues (#221–#240).
-- **68 unique child SP:** Jiaju 12, Annik 11, Chloe 11, Kayla 11, Maria 11, Brandon 12. Parent issues are roll-ups, not extra points.
+- **Plan v3 — 68 unique child SP:** Jiaju 12, Annik 12, Maria 12, Brandon 11, Chloe 11, Kayla 10. Parent issues are roll-ups, not extra points.
 - Four overview priorities with live lead/owner mapping, planned dates, remaining effort, and issue deep links.
 - A 14-day **November 17–30** roadmap: Nov 18 contracts, Nov 20–21 foundations, Nov 23 posting integration, Nov 24 matching integration, Nov 25 freeze, Nov 26–27 QA, Nov 28–29 audit/rehearsal, Nov 30 deadline.
 - My Work, team capacity, workstream, quality/acceptance, timeline and Insights views.
@@ -19,7 +27,7 @@ A lightweight **Sprint 4 command center** for SOEN 341 Team 01, managed separate
 - Correct Sprint 4 acceptance test issues #239 (posting) and #240 (AI) displayed without falsely claiming PASS.
 - Optional GitHub Projects V2 status via a separate read-only Project token.
 
-**Canonical schedule:** [Sprint 4 execution schedule PR #241](https://github.com/EdishAdventure/SOEN341-2026-Team01/pull/241). The dashboard is read-only; source GitHub issues/PRs/CI and executed QA evidence are authoritative. Closed issue = progress tracking completion, **not independently verified acceptance PASS**.
+**Canonical schedule:** [Sprint 4 execution schedule (main)](https://github.com/EdishAdventure/SOEN341-2026-Team01/blob/main/docs/Sprint4/Planning/Sprint4_Execution_Schedule.md). The dashboard is read-only; source GitHub issues/PRs/CI and executed QA evidence are authoritative. Closed issue = progress tracking completion, **not independently verified acceptance PASS**.
 
 ## Files
 
@@ -27,9 +35,13 @@ A lightweight **Sprint 4 command center** for SOEN 341 Team 01, managed separate
 public/
   index.html       Dashboard shell
   styles.css       Responsive styles
-  snapshot.js      November 17 Sprint 4 planning snapshot (public by owner choice)
+  snapshot.js      Sprint 4 v3 planning baseline (public by owner choice)
   app.js           Dashboard interactions and schedule model
   favicon.svg      Site icon
+  sprint3/
+    index.html     Archived Sprint 3 dashboard shell
+    snapshot.js    Original historical Sprint 3 planning snapshot
+    app.js         Archived Sprint 3 roadmap and views
 worker.js          GitHub integration API with verified Access JWT
 wrangler.toml      Cloudflare Workers deployment configuration
 SYNC_SETUP.md      Deploy, authenticate, and connect live sync
