@@ -18,7 +18,7 @@ test('Sprint 4 baseline has six owners with 68 unique child story points',()=>{
   assert.equal(Object.keys(config.baselineSP).length,6);
   assert.equal(Object.values(config.baselineSP).reduce((a,b)=>a+b,0),68);
   assert.deepEqual(Object.entries(config.baselineSP).sort(([a],[b])=>a.localeCompare(b)),
-    Object.entries({EdishAdventure:12,ElSnoozer:11,bthorng:12,mzllo:11,mariaacelena:11,KaylaKOUM:11}).sort(([a],[b])=>a.localeCompare(b)));
+    Object.entries({EdishAdventure:12,ElSnoozer:12,bthorng:11,mzllo:11,mariaacelena:12,KaylaKOUM:10}).sort(([a],[b])=>a.localeCompare(b)));
 });
 
 test('all and only 20 Sprint 4 child issues have estimates and correct one-parent grouping',()=>{
@@ -42,22 +42,24 @@ test('Sprint 4 task points match individual planned ownership exactly',()=>{
   }
 });
 
-test('daily roadmap spans Nov 17–30 with no Sprint 3 dates',()=>{
+test('active dashboard shows Sprint 4 dates and historical Sprint 3 switcher',()=>{
   assert.deepEqual(Object.keys(config.dailyPlan).map(Number),Array.from({length:14},(_,i)=>i+17));
   assert.equal(config.milestones.at(-1).iso,'2026-11-30');
   assert.ok(config.milestones.some(x=>x.iso==='2026-11-25' && /freeze/i.test(x.title)));
   assert.match(html,/Sprint 04/);
+  assert.match(html,/sprint3\/index\.html/);
+  assert.match(html,/Sprint 03 · History/);
   assert.match(html,/SPRINT 4/);
   assert.match(app,/NOVEMBER 17–30/);
   assert.match(app,/Feature freeze Nov 25/);
-  assert.doesNotMatch(html,/Sprint 3|Nov 16/);
+  assert.doesNotMatch(html,/Sprint 3 evaluation deadline|<strong>Sprint 03<\/strong>|sidebar-notice-big">Nov 16/);
   assert.doesNotMatch(app,/Sprint 3|Nov 3–16|NOVEMBER 3–16|Nov 16/);
 });
 
 test('posting, matching, static and release handoffs resolve to assigned owners',()=>{
   const flows=Object.fromEntries(config.collaboration.map(x=>[x.id,x]));
   const who=step=>step.task?snapshot.items.find(i=>i.number===step.task)?.owner:step.login;
-  assert.deepEqual(Array.from(flows.posting.steps,who),['mzllo','ElSnoozer','mzllo','KaylaKOUM']);
+  assert.deepEqual(Array.from(flows.posting.steps,who),['ElSnoozer','ElSnoozer','ElSnoozer','KaylaKOUM']);
   assert.deepEqual(Array.from(flows.matching.steps,who),['EdishAdventure','bthorng','EdishAdventure','mariaacelena']);
   assert.deepEqual(Array.from(flows.quality.steps,who),['mariaacelena','bthorng','mariaacelena']);
 });

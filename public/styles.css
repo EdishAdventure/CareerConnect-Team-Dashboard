@@ -297,3 +297,9 @@ button.timeline-card:hover{border-color:#c5cdec;background:#f9faff}
  .team-roster-progress span:not(.roster-arrow){max-width:110px;line-height:1.3}
  .team-roster-progress .roster-arrow{display:none}
 }
+
+/* Sprint 3 archive / active Sprint 4 navigation, shared by both views. */
+.sprint-switch{display:flex;gap:6px;padding:0 16px 17px;align-items:stretch;}
+.sprint-switch a{display:flex;align-items:center;justify-content:center;flex:1;min-height:34px;padding:6px 8px;border:1px solid rgba(220,229,250,.19);border-radius:8px;color:#c3cde3;text-decoration:none;font-size:11px;font-weight:650;line-height:1.25;text-align:center;transition:background .16s ease,color .16s ease;}
+.sprint-switch a:hover,.sprint-switch a:focus-visible{background:rgba(210,224,255,.12);color:#fff;}
+.sprint-switch a.active{background:rgba(210,224,255,.17);border-color:rgba(210,224,255,.45);color:#fff;}

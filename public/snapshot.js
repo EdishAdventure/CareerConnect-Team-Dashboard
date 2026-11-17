@@ -1,6 +1,4 @@
-/* CareerConnect Sprint 4 planning baseline · Nov 17–30, 2026.
-   A public static schedule preview; the protected Cloudflare Worker replaces private issue progress from GitHub.
-   Child issue closure is not equivalent to successful acceptance testing or submission. No tokens or real applicant data. */
+/* CareerConnect Sprint 4 Plan v3 baseline, Nov 17–30, 2026. Historical Sprint 3 dashboard preserved at /sprint3/index.html. Live GitHub API remains authoritative. */
 window.SPRINT_CONFIG = {
   "repo": "EdishAdventure/SOEN341-2026-Team01",
   "projectUrl": "https://github.com/users/EdishAdventure/projects/1",
@@ -10,11 +8,11 @@ window.SPRINT_CONFIG = {
   "syncedAt": "2026-11-17T00:00:00-05:00",
   "baselineSP": {
     "EdishAdventure": 12,
-    "ElSnoozer": 11,
-    "bthorng": 12,
+    "ElSnoozer": 12,
     "mzllo": 11,
-    "mariaacelena": 11,
-    "KaylaKOUM": 11
+    "bthorng": 11,
+    "mariaacelena": 12,
+    "KaylaKOUM": 10
   },
   "taskSP": {
     "221": 2,
@@ -43,7 +41,7 @@ window.SPRINT_CONFIG = {
       "login": "EdishAdventure",
       "name": "Jiaju",
       "full": "Jiaju Shi",
-      "role": "GenAI matching · Architecture · Release",
+      "role": "AI feature lead · Final integration & release",
       "color": "#5865dd",
       "initials": "JS"
     },
@@ -51,7 +49,7 @@ window.SPRINT_CONFIG = {
       "login": "mzllo",
       "name": "Chloe",
       "full": "Chloe Fokom",
-      "role": "Posting v2 APIs · Feature lead · AI acceptance",
+      "role": "Regression · Posting tests · AI validation & logs",
       "color": "#d67956",
       "initials": "CH"
     },
@@ -59,7 +57,7 @@ window.SPRINT_CONFIG = {
       "login": "bthorng",
       "name": "Brandon",
       "full": "Brandon Thorng",
-      "role": "Matching inputs · Tests · Static maintenance",
+      "role": "Secure matching backend · AI tests · Static fixes",
       "color": "#258f8b",
       "initials": "BR"
     },
@@ -67,7 +65,7 @@ window.SPRINT_CONFIG = {
       "login": "mariaacelena",
       "name": "Maria",
       "full": "Maria Celena Said",
-      "role": "AI Matches UI · CI · Review audit",
+      "role": "AI matching UI · CI & quality · Posting acceptance",
       "color": "#a272c9",
       "initials": "MA"
     },
@@ -75,7 +73,7 @@ window.SPRINT_CONFIG = {
       "login": "KaylaKOUM",
       "name": "Kayla",
       "full": "Kayla Koumfieg",
-      "role": "Posting UI · Regression · Demo",
+      "role": "Posting UI · AI matching acceptance · Demo",
       "color": "#d18a29",
       "initials": "KA"
     },
@@ -83,7 +81,7 @@ window.SPRINT_CONFIG = {
       "login": "ElSnoozer",
       "name": "Annik",
       "full": "Annik Liu",
-      "role": "Qualification DB · AI validation · Team logs",
+      "role": "Posting v2 backend lead · Qualification DB & APIs",
       "color": "#3d84b7",
       "initials": "AN"
     }
@@ -96,7 +94,7 @@ window.SPRINT_CONFIG = {
       "name": "Job Posting v2 · optional qualifications",
       "short": "Posting qualifications",
       "category": "Recruiter experience",
-      "owner": "mzllo",
+      "owner": "ElSnoozer",
       "tasks": [
         221,
         222,
@@ -137,7 +135,7 @@ window.SPRINT_CONFIG = {
       "name": "Existing feature and AI validation",
       "short": "Regression & AI QA",
       "category": "Quality & validation",
-      "owner": "KaylaKOUM",
+      "owner": "mzllo",
       "tasks": [
         231,
         232
@@ -344,7 +342,7 @@ window.SPRINT_CONFIG = {
       "groups": [
         "posting"
       ],
-      "lead": "mzllo",
+      "lead": "ElSnoozer",
       "leadStories": [
         219
       ]
@@ -370,7 +368,7 @@ window.SPRINT_CONFIG = {
       "groups": [
         "verification"
       ],
-      "lead": "KaylaKOUM",
+      "lead": "mzllo",
       "leadTasks": [
         231
       ]
@@ -413,7 +411,7 @@ window.SPRINT_CONFIG = {
           "label": "Editor + details (#224)"
         }
       ],
-      "handoff": "Chloe contract → Annik schema → Chloe API + Kayla UI; Brandon independently runs #239 acceptance.",
+      "handoff": "Annik owns qualification contract, migration and posting APIs (#221–#223); Kayla builds the editor/details (#224); Chloe tests (#225); Maria independently executes #239 acceptance.",
       "target": "Nov 23"
     },
     {
@@ -437,7 +435,7 @@ window.SPRINT_CONFIG = {
           "label": "Matching UI (#229)"
         }
       ],
-      "handoff": "Jiaju contract → Brandon secure inputs → Jiaju grounded provider → Maria UI; Chloe independently runs #240 acceptance.",
+      "handoff": "Jiaju AI design (#226) → Brandon secure candidate inputs (#227) → Jiaju matching model (#228) + Maria AI frontend (#229); Brandon writes tests (#230), Kayla independently executes #240.",
       "target": "Nov 24"
     },
     {
@@ -481,7 +479,7 @@ window.SPRINT_CONFIG = {
           "label": "Final release (#238)"
         }
       ],
-      "handoff": "Kayla regression + Annik US-20 AI verification → Kayla synthetic demo → Jiaju final audit and submission.",
+      "handoff": "Chloe owns regression (#231) and US-20 validation (#232); Kayla demo (#237); Jiaju owns final integration and submission (#238). Chloe also coordinates member-provided logs (#236).",
       "target": "Nov 29"
     }
   ],
@@ -558,7 +556,7 @@ window.SPRINT_SNAPSHOT = {
     {
       "number": 219,
       "title": "Job Posting v2 — Optional Qualifications (US-06/US-07 enhancement)",
-      "owner": "mzllo",
+      "owner": "ElSnoozer",
       "kind": "story",
       "group": "posting",
       "due": "Nov 26",
@@ -615,7 +613,7 @@ window.SPRINT_SNAPSHOT = {
     {
       "number": 221,
       "title": "[TASK-83] Finalize qualification model, API contract and DBML design",
-      "owner": "mzllo",
+      "owner": "ElSnoozer",
       "kind": "task",
       "group": "posting",
       "due": "Nov 18",
@@ -653,7 +651,7 @@ window.SPRINT_SNAPSHOT = {
     {
       "number": 223,
       "title": "[TASK-85] Extend recruiter posting APIs and public qualification responses",
-      "owner": "mzllo",
+      "owner": "ElSnoozer",
       "kind": "task",
       "group": "posting",
       "due": "Nov 23",
@@ -710,7 +708,7 @@ window.SPRINT_SNAPSHOT = {
     {
       "number": 239,
       "title": "[AT-JPV2-01] Optional qualifications across posting creation, edits and public job details",
-      "owner": "bthorng",
+      "owner": "mariaacelena",
       "kind": "acceptance",
       "group": "posting",
       "due": "Nov 26",
@@ -824,7 +822,7 @@ window.SPRINT_SNAPSHOT = {
     {
       "number": 240,
       "title": "[AT-US25-01] Explainable AI resume-to-job matching succeeds and fails safely",
-      "owner": "mzllo",
+      "owner": "KaylaKOUM",
       "kind": "acceptance",
       "group": "matching",
       "due": "Nov 27",
@@ -843,7 +841,7 @@ window.SPRINT_SNAPSHOT = {
     {
       "number": 231,
       "title": "[TASK-93] Execute Sprint 4 cross-feature regression and record defects",
-      "owner": "KaylaKOUM",
+      "owner": "mzllo",
       "kind": "task",
       "group": "verification",
       "due": "Nov 27",
@@ -862,7 +860,7 @@ window.SPRINT_SNAPSHOT = {
     {
       "number": 232,
       "title": "[TASK-94] Validate US-20 AI resume feedback for Sprint 4 evaluation",
-      "owner": "ElSnoozer",
+      "owner": "mzllo",
       "kind": "task",
       "group": "verification",
       "due": "Nov 26",
@@ -938,7 +936,7 @@ window.SPRINT_SNAPSHOT = {
     {
       "number": 236,
       "title": "[TASK-98] Maintain Sprint 4 minutes, contribution and AI usage evidence",
-      "owner": "ElSnoozer",
+      "owner": "mzllo",
       "kind": "task",
       "group": "delivery",
       "due": "Nov 29",
@@ -997,5 +995,5 @@ window.SPRINT_SNAPSHOT = {
   "ci": null,
   "boardAvailable": false,
   "carryoverTests": [],
-  "note": "Sprint 4 static planning snapshot from GitHub issues #218–#240. GitHub live sync replaces state/assignees; no feature or QA result is assumed passed."
+  "note": "Sprint 4 Plan v3 planning baseline. 68 unique child SP; actual states and assignees pulled from GitHub live API. Historical Sprint 3 is available separately."
 };
