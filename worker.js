@@ -6,8 +6,14 @@
 const OWNER = 'EdishAdventure';
 const REPO = 'SOEN341-2026-Team01';
 const FULL = OWNER + '/' + REPO;
-// Only canonical Sprint 4 parents and child issues, not archived prior-sprint cards.
+// Keep active Sprint 4 and archived Sprint 3 issue scopes separate.
+// Archived historical cards retain repository issue states but are no longer in Project #1.
 const NUMBERS = new Set(Array.from({length:23}, (_,i) => 218 + i));
+const SPRINT3_NUMBERS = new Set([
+  9,13,16,23,26,66,67,107,108,151,152,153,154,
+  155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,
+  170,171,172,173,174,175,176,177,178,179
+]);
 
 function apiHeaders(token) {
   return {
@@ -65,11 +71,11 @@ async function githubJSON(path, token) {
   return response.json();
 }
 
-async function allIssues(token) {
+async function allIssues(token, issueNumbers = NUMBERS) {
   const result = [];
   for (let page = 1; page <= 6; page++) {
     const batch = await githubJSON('/repos/' + FULL + '/issues?state=all&per_page=100&page=' + page, token);
-    result.push(...batch.filter(issue => !issue.pull_request && NUMBERS.has(issue.number)));
+    result.push(...batch.filter(issue => !issue.pull_request && issueNumbers.has(issue.number)));
     if (batch.length < 100) break;
   }
   return result;
@@ -140,34 +146,47 @@ async function projectStatuses(token) {
     : {statuses:null,reason:'project_items_unavailable'};
 }
 
-export function dueDate(issue) {
+export function dueDate(issue, sprint = 4) {
   const match = (issue.body || '').match(/(?:Internal due|Target)(?: date)?\s*:?\s*(?:\*\*)?\s*(Nov(?:ember)?\s+\d{1,2})(?:,?\s*2026)?/i);
   if (!match) return null;
   const day = Number(match[1].match(/\d+/)[0]);
-  return day >= 17 && day <= 30 ? 'Nov ' + String(day).padStart(2,'0') : null;
+  return sprint === 3 ? (day >= 3 && day <= 16 ? 'Nov ' + String(day).padStart(2,'0') : null) : (day >= 17 && day <= 30 ? 'Nov ' + String(day).padStart(2,'0') : null);
 }
 
-async function dashboard(token, projectsToken) {
+async function dashboard(token, projectsToken, sprint = 4) {
+  const archived = sprint === 3;
   const [issues, board, prs, runs] = await Promise.all([
-    allIssues(token),
-    projectStatuses(projectsToken).catch(() => ({statuses:null,reason:'project_unavailable'})),
-    githubJSON('/repos/' + FULL + '/pulls?state=open&per_page=35', token).catch(() => []),
-    githubJSON('/repos/' + FULL + '/actions/workflows/sprint2-ci.yml/runs?branch=main&per_page=1', token).catch(() => ({workflow_runs:[]}))
+    allIssues(token, archived ? SPRINT3_NUMBERS : NUMBERS),
+    archived
+      ? Promise.resolve({statuses:null,reason:'historical_project_cards_archived'})
+      : projectStatuses(projectsToken).catch(() => ({statuses:null,reason:'project_unavailable'})),
+    archived
+      ? Promise.resolve([])
+      : githubJSON('/repos/' + FULL + '/pulls?state=open&per_page=35', token).catch(() => []),
+    archived
+      ? Promise.resolve({workflow_runs:[]})
+      : githubJSON('/repos/' + FULL + '/actions/workflows/sprint2-ci.yml/runs?branch=main&per_page=1', token).catch(() => ({workflow_runs:[]}))
   ]);
   return {
     source:'live',
     capturedAt:new Date().toISOString(),
     boardAvailable:board.statuses !== null,
     boardReason:board.reason,
-    items:issues.map(i => ({
+    items:issues.filter(i => !(archived && [107,108].includes(i.number))).map(i => ({
       number:i.number, title:i.title, state:i.state, url:i.html_url,
       assignees:(i.assignees || []).map(u => u.login),
       labels:(i.labels || []).map(l => l.name).filter(Boolean),
       updatedAt:i.updated_at, closedAt:i.closed_at,
-      boardStatus:board.statuses?.get(i.number) || null,
-      due:dueDate(i)
+      boardStatus:archived ? 'Archived' : (board.statuses?.get(i.number) || null),
+      due:dueDate(i, sprint)
     })),
-    carryoverTests:[],
+    carryoverTests:archived ? [107,108].map(number => {
+      const issue = issues.find(i => i.number === number);
+      return {
+        number, state:issue?.state || 'unknown',
+        url:issue?.html_url || 'https://github.com/' + FULL + '/issues/' + number
+      };
+    }) : [],
     prs:prs.slice(0, 15).map(p => ({number:p.number, title:p.title, url:p.html_url,
       draft:p.draft, createdAt:p.created_at, owner:p.user?.login || 'Unknown'})),
     ci:runs.workflow_runs?.[0] ? {
@@ -198,7 +217,16 @@ export default {
       const verified = await verifyCloudflareAccess(request, env);
       if (!verified.ok) return responseJSON({error:verified.message}, verified.status);
       if (!env.GITHUB_TOKEN) return responseJSON({error:'GitHub token is not configured'}, 503);
-      try { return responseJSON(await dashboard(env.GITHUB_TOKEN, env.GITHUB_PROJECTS_TOKEN || env.GITHUB_TOKEN)); }
+      const sprintParam = url.searchParams.get('sprint');
+      if (sprintParam !== null && !['3', '4'].includes(sprintParam))
+        return responseJSON({error:'Unsupported sprint'}, 400);
+      try {
+        return responseJSON(await dashboard(
+          env.GITHUB_TOKEN,
+          env.GITHUB_PROJECTS_TOKEN || env.GITHUB_TOKEN,
+          sprintParam === '3' ? 3 : 4
+        ));
+      }
       catch (_) { return responseJSON({error:'GitHub sync failed. Check the token and repository permissions.'}, 502); }
     }
     return env.ASSETS.fetch(request);
