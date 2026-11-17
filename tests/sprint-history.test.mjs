@@ -25,6 +25,14 @@ test('both Sprint 3 history and active Sprint 4 remain accessible',()=>{
   assert.match(archiveHTML,/Sprint 3 deadline · historical/);
   assert.equal(archive.deadline,'2026-11-16');
   assert.equal(active.deadline,'2026-11-30');
+  for(const page of [activeHTML,archiveHTML]){
+    assert.match(page,/<details class="sprint-picker">/);
+    assert.match(page,/<summary class="workspace-select"/);
+    assert.match(page,/<nav class="sprint-picker-menu"/);
+    assert.doesNotMatch(page,/class="sprint-switch"/);
+  }
+  assert.match(activeHTML,/src="sprint-picker.js"/);
+  assert.match(archiveHTML,/src="\.\.\/sprint-picker.js"/);
 });
 
 test('historical Sprint 3 keeps its original roadmap and task baseline',()=>{
