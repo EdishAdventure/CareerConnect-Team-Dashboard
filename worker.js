@@ -6,11 +6,8 @@
 const OWNER = 'EdishAdventure';
 const REPO = 'SOEN341-2026-Team01';
 const FULL = OWNER + '/' + REPO;
-const NUMBERS = new Set([
-  9,13,16,23,26,66,67,107,108,151,152,153,154,
-  155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,
-  170,171,172,173,174,175,176,177,178,179
-]);
+// Only canonical Sprint 4 parents and child issues, not archived prior-sprint cards.
+const NUMBERS = new Set(Array.from({length:23}, (_,i) => 218 + i));
 
 function apiHeaders(token) {
   return {
@@ -147,7 +144,7 @@ function dueDate(issue) {
   const match = (issue.body || '').match(/(?:Internal due|Target)(?: date)?\s*:?\s*(?:\*\*)?\s*(Nov(?:ember)?\s+\d{1,2})(?:,?\s*2026)?/i);
   if (!match) return null;
   const day = Number(match[1].match(/\d+/)[0]);
-  return day >= 3 && day <= 16 ? 'Nov ' + String(day).padStart(2,'0') : null;
+  return day >= 17 && day <= 30 ? 'Nov ' + String(day).padStart(2,'0') : null;
 }
 
 async function dashboard(token, projectsToken) {
@@ -155,14 +152,14 @@ async function dashboard(token, projectsToken) {
     allIssues(token),
     projectStatuses(projectsToken).catch(() => ({statuses:null,reason:'project_unavailable'})),
     githubJSON('/repos/' + FULL + '/pulls?state=open&per_page=35', token).catch(() => []),
-    githubJSON('/repos/' + FULL + '/actions/runs?per_page=1', token).catch(() => ({workflow_runs:[]}))
+    githubJSON('/repos/' + FULL + '/actions/workflows/sprint2-ci.yml/runs?branch=main&per_page=1', token).catch(() => ({workflow_runs:[]}))
   ]);
   return {
     source:'live',
     capturedAt:new Date().toISOString(),
     boardAvailable:board.statuses !== null,
     boardReason:board.reason,
-    items:issues.filter(i => ![107,108].includes(i.number)).map(i => ({
+    items:issues.map(i => ({
       number:i.number, title:i.title, state:i.state, url:i.html_url,
       assignees:(i.assignees || []).map(u => u.login),
       labels:(i.labels || []).map(l => l.name).filter(Boolean),
@@ -170,11 +167,7 @@ async function dashboard(token, projectsToken) {
       boardStatus:board.statuses?.get(i.number) || null,
       due:dueDate(i)
     })),
-    carryoverTests:[107,108].map(number => {
-      const i = issues.find(x => x.number === number);
-      return {number, state:i?.state || 'unknown',
-        url:i?.html_url || 'https://github.com/' + FULL + '/issues/' + number};
-    }),
+    carryoverTests:[],
     prs:prs.slice(0, 15).map(p => ({number:p.number, title:p.title, url:p.html_url,
       draft:p.draft, createdAt:p.created_at, owner:p.user?.login || 'Unknown'})),
     ci:runs.workflow_runs?.[0] ? {
