@@ -22,17 +22,17 @@ test('Sprint 4 goals resolve canonical parent leadership and QA leads',()=>{
 });
 
 test('feature owner changes are resolved dynamically from current parent issue data',()=>{
-  const input=[{number:219,owner:'mzllo'},{number:220,owner:'EdishAdventure'},{number:231,owner:'KaylaKOUM'}];
-  assert.deepEqual(Array.from(own.resolveLeads(input,[219],'ElSnoozer')),['mzllo']);
+  const input=[{number:219,owner:'ElSnoozer'},{number:220,owner:'EdishAdventure'},{number:231,owner:'mzllo'}];
+  assert.deepEqual(Array.from(own.resolveLeads(input,[219],'mzllo')),['ElSnoozer']);
   assert.equal(own.resolveLead(input,220,'ElSnoozer'),'EdishAdventure');
-  assert.deepEqual(Array.from(own.resolveLeads(input,[231],'mzllo')),['KaylaKOUM']);
+  assert.deepEqual(Array.from(own.resolveLeads(input,[231],'KaylaKOUM')),['mzllo']);
 });
 
 test('GitHub live task owners, states and board statuses override static snapshot',()=>{
   const payload={capturedAt:'2026-11-18T20:50:00Z',items:[
     {number:220,assignees:['EdishAdventure'],state:'open',boardStatus:'Ready'},
     {number:221,assignees:['ElSnoozer'],state:'open',boardStatus:'In Progress'},
-    {number:231,assignees:['KaylaKOUM'],state:'closed',boardStatus:'Done',closedAt:'2026-11-18T20:50:00Z'}
+    {number:231,assignees:['mzllo'],state:'closed',boardStatus:'Done',closedAt:'2026-11-18T20:50:00Z'}
   ]};
   const merged=own.mergeSnapshot(snapshot,payload);
   assert.equal(merged.items.find(x=>x.number===221).owner,'ElSnoozer');
@@ -74,7 +74,7 @@ test('issue closure is progress, not acceptance PASS',()=>{
 
 test('acceptance result remains unclaimed by dashboard after live closure',()=>{
   const merged=own.mergeSnapshot(snapshot,{
-    items:[{number:239,state:'closed',closedAt:'2026-11-26T17:41:29Z',assignees:['bthorng']}]
+    items:[{number:239,state:'closed',closedAt:'2026-11-26T17:41:29Z',assignees:['mariaacelena']}]
   });
   assert.equal(merged.items.find(x=>x.number===239).state,'closed');
   assert.equal(own.isComplete(merged.items.find(x=>x.number===239)),true);
