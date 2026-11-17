@@ -1,6 +1,6 @@
 # GitHub live sync & Cloudflare deployment
 
-This project is a **read-only** Sprint 4 dashboard (November 17–30, 2026). The GitHub repository containing this code is public by owner choice. The **original CareerConnect repository and its issue details are private**, so live API access must be protected.
+This project is a **read-only two-sprint dashboard**: archived Sprint 3 (November 3–16) and active Sprint 4 (November 17–30, 2026). The GitHub repository containing this code is public by owner choice. The **original CareerConnect repository and its issue details are private**, so live API access must be protected.
 
 ## 1. GitHub source (already added)
 
@@ -77,6 +77,24 @@ The Worker synchronizes **only Sprint 4 issues #218–#240** from the private re
 
 
 **Sprint 4 deployment verification:** After merging, confirm the site displays **Sprint 04**, feature freeze **Nov 25**, deadline **Nov 30**, five workstreams, 20 child issues / 68 SP, and that a signed-in team member can sync issue #220. Publishing the GitHub branch does not alone establish that the workers.dev hostname has been deployed.
+
+## 3A. Sprint navigation and protected historical sync
+
+The root path `/` displays the **active Sprint 4** dashboard by default. The sidebar sprint switcher links to `/sprint3/index.html`, the preserved Sprint 3 UI and original November 3 planning snapshot. The historical page includes a link back to the active sprint. Both pages reuse `public/styles.css` and `public/ownership.js`.
+
+The protected GitHub API accepts two distinct GET routes:
+
+- `/api/overview?sprint=4` (or `/api/overview`): exactly 23 current Sprint 4 issues (#218–#240) with optional current Project V2 Status and latest main CI.
+- `/api/overview?sprint=3`: original historical Sprint 3 issue set including carryover acceptance records #107/#108. The former Project cards were intentionally archived and **are not restored to Project #1**. GitHub Issue open/closed state remains readable, while historical Project statuses are labeled **Archived**. The original Sprint 3 issue snapshot is a planning baseline, not a retroactive record of test PASS or completed story-point velocity.
+
+Both API routes still require a **verified Cloudflare Access JWT** and private GitHub repository token; no separate frontend credential is needed. The historical page does not call the active Sprint 4 API.
+
+**Sprint 4 Plan v3:** Jiaju 12 SP, Annik 12 SP, Maria 12 SP, Brandon 11 SP, Chloe 11 SP, Kayla 10 SP. The 68 child points are current-sprint only. The old Sprint 3 89-SP planning baseline is visible only in history.
+
+To verify after Cloudflare deployment, navigate between the sidebar tabs and confirm:
+1. Sprint 04 defaults to Nov 17–30, 68 SP, and issues #218–#240.
+2. Sprint 03 History shows Nov 3–16, original nine workstreams, archived Project status, and historical issue IDs like #26/#154.
+3. Each sprint's **Sync now** updates only its respective issue set; unauthorized requests to either protected API route are rejected.
 
 ## 4. Verify live syncing
 
