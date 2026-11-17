@@ -4,7 +4,7 @@ A lightweight **Sprint 4 command center** for SOEN 341 Team 01, managed separate
 
 **Source project (private):** [EdishAdventure/SOEN341-2026-Team01](https://github.com/EdishAdventure/SOEN341-2026-Team01)  
 **Dashboard repository:** [EdishAdventure/CareerConnect-Team-Dashboard](https://github.com/EdishAdventure/CareerConnect-Team-Dashboard)  
-**Sprint deadline:** **Monday, November 170, 2026**; internal feature freeze **November 25**.
+**Sprint deadline:** **Monday, November 30, 2026**; internal feature freeze **November 25**.
 
 ## Sprint 4 scope and dashboard features
 
