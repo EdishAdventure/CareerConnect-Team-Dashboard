@@ -42,13 +42,13 @@ test('Sprint 4 task points match individual planned ownership exactly',()=>{
   }
 });
 
-test('active dashboard shows Sprint 4 dates and historical Sprint 3 switcher',()=>{
+test('active dashboard shows Sprint 4 dates and historical Sprint 3 dropdown',()=>{
   assert.deepEqual(Object.keys(config.dailyPlan).map(Number),Array.from({length:14},(_,i)=>i+17));
   assert.equal(config.milestones.at(-1).iso,'2026-11-30');
   assert.ok(config.milestones.some(x=>x.iso==='2026-11-25' && /freeze/i.test(x.title)));
   assert.match(html,/Sprint 04/);
   assert.match(html,/sprint3\/index\.html/);
-  assert.match(html,/Sprint 03 · History/);
+  assert.match(html,/<span>Sprint 03<\/span><small>History/);
   assert.match(html,/SPRINT 4/);
   assert.match(app,/NOVEMBER 17–30/);
   assert.match(app,/Feature freeze Nov 25/);
