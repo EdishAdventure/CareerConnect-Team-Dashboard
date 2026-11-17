@@ -20,8 +20,8 @@ const worker=read('worker.js');
 test('both Sprint 3 history and active Sprint 4 remain accessible',()=>{
   assert.match(activeHTML,/href="\/sprint3\/index\.html"/);
   assert.match(archiveHTML,/href="\/"/);
-  assert.match(activeHTML,/Sprint 04 · Active/);
-  assert.match(archiveHTML,/Sprint 03 · History/);
+  assert.match(activeHTML,/<span>Sprint 04<\/span><small>Active/);
+  assert.match(archiveHTML,/<span>Sprint 03<\/span><small>History/);
   assert.match(archiveHTML,/Sprint 3 deadline · historical/);
   assert.equal(archive.deadline,'2026-11-16');
   assert.equal(active.deadline,'2026-11-30');
