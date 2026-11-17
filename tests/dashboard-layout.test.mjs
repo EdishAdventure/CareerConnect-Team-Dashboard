@@ -71,7 +71,36 @@ test('quality view contains new acceptance tests, backend CI and six-member docu
   assert.match(q,/233/);
   assert.match(q,/236/);
   assert.match(q,/Closure is not proof of PASS/);
+  for(const n of [231,232,233,234,235,236,237,238]) assert.match(q,new RegExp('num:'+n+'\\b'));
+  assert.match(q,/quality-hub section/);
+  assert.match(q,/quality-at-list/);
+  assert.match(q,/quality-activities-grid/);
+  assert.match(q,/Verification/);
+  assert.match(q,/Engineering quality/);
+  assert.match(q,/Release readiness/);
+  assert.doesNotMatch(q,/at-grid section|release-list|release-row/);
   assert.doesNotMatch(q,/US-04 carryover|#107 and #108/);
+});
+
+test('sprint selector is anchored to the top-left dropdown, not separate buttons',()=>{
+  assert.match(html,/<details class="sprint-picker">/);
+  assert.match(html,/<summary class="workspace-select"/);
+  assert.match(html,/<nav class="sprint-picker-menu" aria-label="Sprint selection">/);
+  assert.match(html,/src="sprint-picker.js"/);
+  assert.doesNotMatch(html,/class="sprint-switch"/);
+  assert.match(css,/\.sprint-picker-menu\{/);
+  assert.match(css,/\.sprint-picker > summary\.workspace-select:focus-visible/);
+  assert.doesNotMatch(css,/\.sprint-switch\{/);
+});
+
+test('regression and release activities use a readable full-width responsive layout',()=>{
+  const q=app.slice(app.indexOf('function renderQuality()'),app.indexOf('function renderTimeline()'));
+  assert.match(q,/quality-panel/);
+  assert.match(q,/quality-group-count/);
+  assert.match(q,/quality-task-bottom/);
+  assert.match(css,/\.quality-hub\{display:grid;grid-template-columns:minmax\(0,1fr\)/);
+  assert.match(css,/\.quality-activities-grid\{display:grid;grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+  assert.match(css,/@media\(max-width:860px\)\{\.quality-activities-grid\{grid-template-columns:1fr\}/);
 });
 
 test('insights is separate, overview uncluttered and layout unchanged',()=>{
