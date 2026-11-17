@@ -140,7 +140,7 @@ async function projectStatuses(token) {
     : {statuses:null,reason:'project_items_unavailable'};
 }
 
-function dueDate(issue) {
+export function dueDate(issue) {
   const match = (issue.body || '').match(/(?:Internal due|Target)(?: date)?\s*:?\s*(?:\*\*)?\s*(Nov(?:ember)?\s+\d{1,2})(?:,?\s*2026)?/i);
   if (!match) return null;
   const day = Number(match[1].match(/\d+/)[0]);
