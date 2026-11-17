@@ -18,8 +18,13 @@
         <div><div class="brand-name">careerconnect<span class="brand-period">.</span></div><div class="brand-sub">ENGINEERING WORKSPACE</div></div>
       </div>
       <div class="sidebar-divider"></div>
-      <div class="workspace-select"><div class="workspace-avatar">S3</div><div class="workspace-text"><strong>Sprint 03</strong><small>Fall 2026 · SOEN 341</small></div><span class="workspace-chevron">⌄</span></div>
-      <nav class="sprint-switch" aria-label="Select sprint"><a href="/sprint3/index.html" class="active" aria-current="page">Sprint 03 · History</a><a href="/" title="Open active Sprint 4">Sprint 04 · Active</a></nav>
+<details class="sprint-picker">
+        <summary class="workspace-select" aria-label="Current sprint: Sprint 03. Select a sprint"><span class="workspace-avatar">S3</span><span class="workspace-text"><strong>Sprint 03</strong><small>Fall 2026 · SOEN 341</small></span><span class="workspace-chevron" aria-hidden="true">⌄</span></summary>
+        <nav class="sprint-picker-menu" aria-label="Sprint selection">
+          <a href="/"><span>Sprint 04</span><small>Active · Nov 17–30</small></a>
+          <a class="active" aria-current="page" href="/sprint3/index.html"><span>Sprint 03</span><small>History · Nov 3–16</small></a>
+        </nav>
+      </details>
       <div class="nav-section-label">WORKSPACE</div>
       <nav class="nav-list" aria-label="Main navigation">
         <button class="nav-link active" data-view="overview"><span data-icon="layout"></span>Overview<span class="nav-active-dot"></span></button>
@@ -61,6 +66,7 @@ npx wrangler secret put GITHUB_TOKEN</pre>
   <div class="modal-overlay hidden" id="detail-overlay" aria-hidden="true"><div class="modal-backdrop" id="modal-backdrop"></div><aside class="detail-panel" id="detail-panel" aria-label="Issue details" role="dialog" aria-modal="true"></aside></div>
   <script src="snapshot.js"></script>
   <script src="../ownership.js"></script>
+  <script src="../sprint-picker.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

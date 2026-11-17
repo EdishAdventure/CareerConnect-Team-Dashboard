@@ -166,7 +166,19 @@ function renderQuality(){
   const closed=tests.filter(completed).length;
   const quality=[231,232,233,234,235,236,237,238].map(item).filter(Boolean);
   const finished=quality.filter(completed).length;
-  const lint=item(233);
+  const groupDefs=[
+    {title:'Verification',subtitle:'Regression and the existing AI feature',tasks:[
+      {num:231,icon:'check',name:'Cross-feature regression',description:'Full seeker and recruiter workflow'},
+      {num:232,icon:'sparkles',name:'AI resume feedback validation',description:'US-20 relevance, evidence and failure checks'}]},
+    {title:'Engineering quality',subtitle:'Maintainability and review evidence',tasks:[
+      {num:233,icon:'code',name:'Backend static analysis in CI',description:'Ruff integration and CI gate'},
+      {num:234,icon:'layers',name:'Static-analysis maintenance',description:'Findings, fixes and linked commits'},
+      {num:235,icon:'check',name:'Tests and PR review audit',description:'Coverage, standards and peer reviews'}]},
+    {title:'Release readiness',subtitle:'Documents and final demonstration',tasks:[
+      {num:236,icon:'file',name:'Individual logs and minutes',description:'Six AI-use PDFs and contribution records'},
+      {num:237,icon:'flag',name:'Demo fixtures and rehearsal',description:'Synthetic data and walkthrough'},
+      {num:238,icon:'file',name:'Final report and release audit',description:'Submission evidence and final checklist'}]}
+  ];
   return `${renderIntro()}
   <div class="grid-4 section">
     <div class="kpi-card"><div class="kpi-top"><span class="kpi-label">Sprint 4 acceptance tests</span><span class="kpi-icon">${icon('check')}</span></div><div class="kpi-value">${tests.length}</div><div class="kpi-foot">Posting v2 #239 · AI matching #240</div></div>
@@ -174,25 +186,36 @@ function renderQuality(){
     <div class="kpi-card"><div class="kpi-top"><span class="kpi-label">Quality & release tasks</span><span class="kpi-icon">${icon('file')}</span></div><div class="kpi-value">${finished}<small> / ${quality.length}</small></div><div class="kpi-foot">Regression, static analysis, logs & demo</div></div>
     <div class="kpi-card"><div class="kpi-top"><span class="kpi-label">CareerConnect CI</span><span class="kpi-icon">${icon('code')}</span></div><div class="kpi-value" style="font-size:18px;margin-top:20px">${data.ci?E((data.ci.conclusion||data.ci.status||'unknown').toUpperCase()):'Not synced'}</div><div class="kpi-foot">${data.ci?`Latest CI · ${friendlyDate(data.ci.updated_at)}`:'Connect GitHub to see CI status'}</div></div>
   </div>
-  <div class="at-grid section">
-    <div class="panel">
-      <div class="panel-title-row"><div><h2 class="panel-title">Acceptance test issues</h2><div class="panel-subtitle">Open GitHub to view actual execution result, tester, commit and evidence</div></div>${chip('Actual results in issues','blue')}</div>
-      <div class="quality-list">${tests.map(i=>`<div class="quality-item" data-open="${i.number}">${avatar(i.owner)}<div class="quality-main"><b>${E(cleanTitle(i.title))}</b><small>#${i.number} · ${E(person(i.owner).name)} · ${E(C.groups.find(g=>g.key===i.group)?.id||'')}</small></div>${badgeStatus(i)}</div>`).join('')}</div>
-      <div class="mini-banner">${icon('info')}<p>These cards show GitHub issue closure, not test PASS. Executed results must be independently recorded in #239/#240 with evidence. Existing US-20 AI resume-feedback validation is tracked separately in #232.</p></div>
-    </div>
-    <div class="panel">
-      <div class="panel-title-row"><div><h2 class="panel-title">Regression & release quality activities</h2><div class="panel-subtitle">All Sprint 4 quality and submission obligations</div></div>
-      <div class="release-list">${[
-        {icon:'check',a:'Cross-feature regression',b:'End-to-end seeker/recruiter workflows',num:231},
-        {icon:'sparkles',a:'AI resume feedback validation',b:'US-20 real-provider synthetic evidence',num:232},
-        {icon:'code',a:'Backend static analysis in CI',b:'Ruff gate and baseline',num:233},
-        {icon:'layers',a:'Maintenance & review audit',b:'Static findings + independent PR reviews',num:234},
-        {icon:'check',a:'Code review quality',b:'Test coverage, PR reviews, coding standards',num:235},
-        {icon:'file',a:'Individual AI & contribution logs',b:'Six PDFs and meeting minutes',num:236},
-        {icon:'flag',a:'Demo rehearsal & final report',b:'Synthetic fixtures and submission audit',num:238}
-      ].map(x=>`<div class="release-row" data-open="${x.num}">${icon(x.icon)}<div><strong>${E(x.a)} · #${x.num}</strong><span>${E(x.b)}</span></div></div>`).join('')}</div>
-      <div class="mini-banner">${icon('info')}<p>Ruff CI task #233: ${E(lint?.state||'unknown')}. The dashboard is read-only and never fabricates PASS, review approvals or submitted files.</p></div>
-    </div>
+  <div class="quality-hub section">
+    <section class="panel quality-panel" aria-label="Acceptance test issues">
+      <div class="panel-title-row">
+        <div><h2 class="panel-title">Acceptance tests</h2><div class="panel-subtitle">Two independent execution records · open an issue for the actual result</div></div>
+        ${chip('Actual results in GitHub','blue')}
+      </div>
+      <div class="quality-at-list">${tests.map(i=>`<button type="button" class="quality-at-card" data-open="${i.number}" aria-label="Open acceptance issue ${i.number}">
+        ${avatar(i.owner)}
+        <span class="quality-main"><b>${E(cleanTitle(i.title))}</b><small>#${i.number} · ${E(person(i.owner).name)} · ${E(C.groups.find(g=>g.key===i.group)?.id||'')}</small></span>
+        ${badgeStatus(i)}
+      </button>`).join('')}</div>
+      <div class="quality-explainer">${icon('info')}<p>Issue closure tracks progress, not a verified test PASS. Actual results, tester, commit and evidence belong in #239 and #240; US-20 validation is separately tracked in #232.</p></div>
+    </section>
+    <section class="panel quality-panel" aria-label="Regression and release quality">
+      <div class="panel-title-row">
+        <div><h2 class="panel-title">Regression & release quality</h2><div class="panel-subtitle">Eight deliverables, organized by purpose rather than squeezed into a narrow column</div></div>
+        ${chip(`${finished} / ${quality.length} issues closed`,finished===quality.length?'green':'grey')}
+      </div>
+      <div class="quality-activities-grid">${groupDefs.map(group=>{
+        const present=group.tasks.map(t=>({...t,issue:item(t.num)})).filter(t=>t.issue);
+        const done=present.filter(t=>completed(t.issue)).length;
+        return `<section class="quality-group"><header class="quality-group-head"><div><h3>${E(group.title)}</h3><p>${E(group.subtitle)}</p></div><span class="quality-group-count">${done}/${present.length} closed</span></header>
+          <div class="quality-task-list">${present.map(t=>`<button type="button" class="quality-task" data-open="${t.num}" aria-label="Open issue ${t.num}: ${E(t.name)}">
+             <span class="quality-task-title">${icon(t.icon)}<span class="quality-task-copy"><strong>${E(t.name)} · #${t.num}</strong><small>${E(t.description)}</small></span></span>
+             <span class="quality-task-bottom"><span class="quality-task-owner">${avatar(t.issue.owner)}${E(person(t.issue.owner).name)}</span>${badgeStatus(t.issue)}</span>
+           </button>`).join('')}</div>
+        </section>`;
+      }).join('')}</div>
+      <div class="quality-explainer">${icon('info')}<p>All cards link to live GitHub issues. CI, reviews, static-analysis evidence and six individual AI PDFs must be verified there; this dashboard does not infer approvals or submitted artifacts.</p></div>
+    </section>
   </div>`;
 }
 function renderTimeline(){const day=ui.selectedDay,h=countHealth(tasks());return `${renderIntro()}<div class="timeline-heading section"><div><span class="eyebrow">NOVEMBER 17–30 · FALL 2026</span><h2>Daily sprint roadmap</h2><p>Click any date to see the planned focus and assigned issues due that day. Highlighted phases may overlap.</p></div><div class="timeline-status">${paceTag(h)}<span>${E(data.source==='live'?'Live GitHub':'Nov 17 planning snapshot')}</span></div></div>

@@ -42,13 +42,13 @@ test('Sprint 4 task points match individual planned ownership exactly',()=>{
   }
 });
 
-test('active dashboard shows Sprint 4 dates and historical Sprint 3 switcher',()=>{
+test('active dashboard shows Sprint 4 dates and historical Sprint 3 dropdown',()=>{
   assert.deepEqual(Object.keys(config.dailyPlan).map(Number),Array.from({length:14},(_,i)=>i+17));
   assert.equal(config.milestones.at(-1).iso,'2026-11-30');
   assert.ok(config.milestones.some(x=>x.iso==='2026-11-25' && /freeze/i.test(x.title)));
   assert.match(html,/Sprint 04/);
   assert.match(html,/sprint3\/index\.html/);
-  assert.match(html,/Sprint 03 · History/);
+  assert.match(html,/<span>Sprint 03<\/span><small>History/);
   assert.match(html,/SPRINT 4/);
   assert.match(app,/NOVEMBER 17–30/);
   assert.match(app,/Feature freeze Nov 25/);
@@ -71,7 +71,36 @@ test('quality view contains new acceptance tests, backend CI and six-member docu
   assert.match(q,/233/);
   assert.match(q,/236/);
   assert.match(q,/Closure is not proof of PASS/);
+  for(const n of [231,232,233,234,235,236,237,238]) assert.match(q,new RegExp('num:'+n+'\\b'));
+  assert.match(q,/quality-hub section/);
+  assert.match(q,/quality-at-list/);
+  assert.match(q,/quality-activities-grid/);
+  assert.match(q,/Verification/);
+  assert.match(q,/Engineering quality/);
+  assert.match(q,/Release readiness/);
+  assert.doesNotMatch(q,/at-grid section|release-list|release-row/);
   assert.doesNotMatch(q,/US-04 carryover|#107 and #108/);
+});
+
+test('sprint selector is anchored to the top-left dropdown, not separate buttons',()=>{
+  assert.match(html,/<details class="sprint-picker">/);
+  assert.match(html,/<summary class="workspace-select"/);
+  assert.match(html,/<nav class="sprint-picker-menu" aria-label="Sprint selection">/);
+  assert.match(html,/src="sprint-picker.js"/);
+  assert.doesNotMatch(html,/class="sprint-switch"/);
+  assert.match(css,/\.sprint-picker-menu\{/);
+  assert.match(css,/\.sprint-picker > summary\.workspace-select:focus-visible/);
+  assert.doesNotMatch(css,/\.sprint-switch\{/);
+});
+
+test('regression and release activities use a readable full-width responsive layout',()=>{
+  const q=app.slice(app.indexOf('function renderQuality()'),app.indexOf('function renderTimeline()'));
+  assert.match(q,/quality-panel/);
+  assert.match(q,/quality-group-count/);
+  assert.match(q,/quality-task-bottom/);
+  assert.match(css,/\.quality-hub\{display:grid;grid-template-columns:minmax\(0,1fr\)/);
+  assert.match(css,/\.quality-activities-grid\{display:grid;grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+  assert.match(css,/@media\(max-width:860px\)\{\.quality-activities-grid\{grid-template-columns:1fr\}/);
 });
 
 test('insights is separate, overview uncluttered and layout unchanged',()=>{
