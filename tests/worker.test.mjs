@@ -36,6 +36,8 @@ test('parse Sprint 4 dates from the actual task issue body format',()=>{
   assert.equal(dueDate({body:'- Target: **Nov 29, 2026**.'}),'Nov 29');
   assert.equal(dueDate({body:'- Internal due: **November 30, 2026**.'}),'Nov 30');
   assert.equal(dueDate({body:'- Internal due: **November 16, 2026**.'}),null);
+  assert.equal(dueDate({body:'- Internal due: **November 16, 2026**.'},3),'Nov 16');
+  assert.equal(dueDate({body:'- Internal due: **November 20, 2026**.'},3),null);
   assert.equal(dueDate({body:'No explicit target date.'}),null);
 });
 
@@ -44,7 +46,9 @@ test('Worker is scoped to exactly Sprint 4 canonical issue IDs',()=>{
   assert.match(source,/length:23/);
   assert.match(source,/218 \+ i/);
   assert.match(source,/sprint2-ci\.yml\/runs\?branch=main/);
-  assert.doesNotMatch(source,/9,13,16,23,26,66,67,107,108/);
+  assert.match(source,/const SPRINT3_NUMBERS/);
+  assert.match(source,/9,13,16,23,26,66,67,107,108/);
+  assert.match(source,/sprintParam === '3'/);
 });
 
 test('private progress API fails closed without Cloudflare Access config',async()=>{
