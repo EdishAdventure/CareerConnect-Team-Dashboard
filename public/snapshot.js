@@ -1,148 +1,1001 @@
-/* GitHub issue snapshot refreshed 2026-11-03 after ownership transfer. Actual work status is inferred ONLY from open/closed state.
-   Live Cloudflare Worker sync replaces these records with GitHub API data. */
+/* CareerConnect Sprint 4 planning baseline · Nov 17–30, 2026.
+   A public static schedule preview; the protected Cloudflare Worker replaces private issue progress from GitHub.
+   Child issue closure is not equivalent to successful acceptance testing or submission. No tokens or real applicant data. */
 window.SPRINT_CONFIG = {
-  repo: 'EdishAdventure/SOEN341-2026-Team01',
-  projectUrl: 'https://github.com/users/EdishAdventure/projects/1',
-  deadline: '2026-11-16',
-  freeze: '2026-11-12',
-  release: '2026-11-15',
-  syncedAt: '2026-11-03T12:10:00-05:00',
-  // Approved Nov 3 allocation. These values are a historical baseline; the
-  // current remaining SP are recomputed using live task assignees and evidence.
-  baselineSP: {EdishAdventure:19,ElSnoozer:17,bthorng:17,mzllo:13,mariaacelena:10,KaylaKOUM:13},
-  taskSP: {
-    162:3,167:8,169:2,171:3,172:3,
-    66:3,67:2,157:3,166:5,174:2,179:2,
-    159:5,161:3,165:5,175:2,176:2,
-    155:3,156:2,163:5,173:1,177:2,
-    158:5,170:5,
-    160:3,164:3,168:5,178:2
+  "repo": "EdishAdventure/SOEN341-2026-Team01",
+  "projectUrl": "https://github.com/users/EdishAdventure/projects/1",
+  "deadline": "2026-11-30",
+  "freeze": "2026-11-25",
+  "release": "2026-11-29",
+  "syncedAt": "2026-11-17T00:00:00-05:00",
+  "baselineSP": {
+    "EdishAdventure": 12,
+    "ElSnoozer": 11,
+    "bthorng": 12,
+    "mzllo": 11,
+    "mariaacelena": 11,
+    "KaylaKOUM": 11
   },
-  people: [
-    {login:'EdishAdventure', name:'Jiaju', full:'Jiaju Shi', role:'Generative AI · Integration & delivery', color:'#5865dd', initials:'JS'},
-    {login:'mzllo', name:'Chloe', full:'Chloe', role:'Recruiter dashboard · Saved jobs', color:'#d67956', initials:'CH'},
-    {login:'bthorng', name:'Brandon', full:'Brandon', role:'Notifications · Deadline reminders', color:'#258f8b', initials:'BR'},
-    {login:'mariaacelena', name:'Maria', full:'Maria', role:'Analytics frontend · Automated testing/CI', color:'#a272c9', initials:'MA'},
-    {login:'KaylaKOUM', name:'Kayla', full:'Kayla', role:'Shared frontend · Acceptance testing', color:'#d18a29', initials:'KA'},
-    {login:'ElSnoozer', name:'Annik', full:'Annik', role:'Analytics/history · Recruiter profile · AI support', color:'#3d84b7', initials:'AN'}
-  ],
-  groups: [
-    {key:'recruiter',story:13,id:'US-04',name:'Recruiter / company profile',short:'Profile carryover',category:'Recruiter experience',owner:'ElSnoozer',tasks:[66,67,169],due:'Nov 12',color:'#8c7af2',note:'Finish profile UI and authorization evidence; shared-company membership remains deferred.'},
-    {key:'recruiter-plus',story:9,id:'US-15',name:'Recruiter dashboard enhancements',short:'Recruiter enhancements',category:'Recruiter experience',owner:'mzllo',tasks:[155,156,173],due:'Nov 12',color:'#8c7af2',note:'Sprint 2 story remains closed; only new posting counts and date filters are in scope.'},
-    {key:'saved',story:16,id:'US-09',name:'Saved jobs MVP',short:'Saved jobs',category:'Seeker experience',owner:'mzllo',tasks:[163,164,177],due:'Nov 12',color:'#ef9a60',note:'Required foundation for deadline reminders.'},
-    {key:'status-notifs',story:23,id:'US-17',name:'Seeker status-change notifications',short:'Status notifications',category:'Notifications',owner:'bthorng',tasks:[159,160,161,175],due:'Nov 12',color:'#43a5ac',note:'Shared inbox and recruiter status-change triggers.'},
-    {key:'ai',story:26,id:'US-20',name:'AI-powered resume feedback',short:'AI resume feedback',category:'AI feature',owner:'EdishAdventure',tasks:[166,167,168,179],due:'Nov 12',color:'#6686e9',note:'Secure PDF extraction, real provider adapter, consent and validation.'},
-    {key:'analytics',story:151,id:'US-22',name:'Application analytics & trends',short:'Analytics & trends',category:'Seeker experience',owner:'ElSnoozer',tasks:[157,158,174],due:'Nov 12',color:'#ba81de',note:'Extend existing seeker overview and history without duplicate dashboards.'},
-    {key:'recruiter-notifs',story:152,id:'US-23',name:'Recruiter new-application alerts',short:'Recruiter alerts',category:'Notifications',owner:'bthorng',tasks:[162,176],due:'Nov 12',color:'#43a5ac',note:'Reuses US-17 notification infrastructure; one alert per valid submission.'},
-    {key:'deadline',story:153,id:'US-24',name:'Saved-job deadline reminders',short:'Deadline reminders',category:'Notifications',owner:'bthorng',tasks:[165,178],due:'Nov 12',color:'#43a5ac',note:'In-app only; US-12 email delivery is outside Sprint 3.'},
-    {key:'delivery',story:154,id:'TRACKER',name:'Quality & release readiness',short:'QA & release',category:'Release readiness',owner:'EdishAdventure',tasks:[170,171,172],due:'Nov 15',color:'#66768b',note:'CI, test fixtures, meeting minutes, individual PDFs, summary and final demo.'}
-  ],
-
-  // Proposed phase windows and daily delivery focus (Nov 3–16). Milestones are
-  // planning targets; outcomes always come from real GitHub issues / evidence.
-  phases: [
-    {id:'audit',name:'Audit & planning',start:3,end:4},
-    {id:'architecture',name:'Architecture & tests',start:4,end:6},
-    {id:'development',name:'Development',start:5,end:11},
-    {id:'integration',name:'Integration & review',start:9,end:13},
-    {id:'testing',name:'Testing & stabilization',start:12,end:14},
-    {id:'reports',name:'Reports & demo',start:14,end:16}
-  ],
-  dailyPlan: {
-    3:{focus:'Kickoff & ownership',goals:['Confirm Sprint 3 committed scope and feature boundaries','Confirm six owners, reviewers and team availability','Review Sprint 2 carryover and current QA gaps']},
-    4:{focus:'Contracts & acceptance plan',goals:['Agree API interfaces and dependency order','Validate story and sub-issue acceptance criteria','Check GitHub Project statuses and baseline CI']},
-    5:{focus:'Parallel development begins',goals:['Start implementation branches for all core workstreams','Connect feature owners with frontend partners','Create early unit-test scaffolding']},
-    6:{focus:'First vertical slices',goals:['Review early backend/API changes and open first PRs','Unblock saved-jobs, notification and AI dependencies','Keep automated checks running on every PR']},
-    7:{focus:'Integration checkpoint',goals:['Review first merged feature PRs','Confirm notification and saved-jobs foundational APIs','Review current blockers with all six members']},
-    8:{focus:'Data & extraction checkpoint',goals:['Complete first analytics aggregation and PDF extraction slices','Run focused unit tests against boundary and authorization cases','Check dependencies before UI integration']},
-    9:{focus:'Frontend/API integration',goals:['Integrate recruiter filters, notification inbox and saved-job UI','Validate notification triggers and ownership checks','Record any integration defects as GitHub issues']},
-    10:{focus:'Core flows operational',goals:['Demonstrate analytics and recruiter improvements end to end','Validate AI provider adapter and error paths','Review completion against the Nov 12 freeze']},
-    11:{focus:'Final implementation handoff',goals:['Finish AI resume feedback UI and deadline eligibility','Run cross-feature regression and code reviews','Raise any outstanding P0 blockers immediately']},
-    12:{focus:'Feature freeze',goals:['Merge planned feature PRs after passing CI and review','Execute recruiter profile carryover acceptance tests','Switch focus from features to bug fixes and verification']},
-    13:{focus:'Acceptance evidence',goals:['Run scenarios using known synthetic test fixtures','Record tester, environment, actual result and evidence links','Retest resolved defects and confirm CI status']},
-    14:{focus:'Quality / release candidate',goals:['Complete acceptance tests and end-to-end walkthrough','Confirm all release-critical results and fixes','Finalize documented evidence and repeatable demo fixtures']},
-    15:{focus:'Internal release & rehearsal',goals:['Collect each member’s AI and contribution logs and Sprint 3 PDF','Finalize one-page report and meeting minutes','Conduct full-team demo rehearsal and final regression']},
-    16:{focus:'Submission & TA evaluation',goals:['Verify submission package and repository permissions','Demonstrate working implementation and supporting evidence','Submit / attend evaluation according to the assigned lab schedule']}
+  "taskSP": {
+    "221": 2,
+    "222": 5,
+    "223": 5,
+    "224": 5,
+    "225": 2,
+    "226": 2,
+    "227": 5,
+    "228": 8,
+    "229": 5,
+    "230": 3,
+    "231": 3,
+    "232": 3,
+    "233": 3,
+    "234": 3,
+    "235": 3,
+    "236": 3,
+    "237": 3,
+    "238": 2,
+    "239": 1,
+    "240": 2
   },
-  officialGoals: [
-    {id:'recruiter',num:'01',title:'Recruiter dashboard & postings',subtitle:'Review candidates, manage postings and update status',groups:['recruiter','recruiter-plus'],lead:'mzllo',leadStories:[9,13]},
-    {id:'analytics',num:'02',title:'Application analytics & history',subtitle:'Five-status breakdown, accurate weekly activity',groups:['analytics'],lead:'ElSnoozer',leadStories:[151]},
-    {id:'notices',num:'03',title:'Notifications & reminders',subtitle:'Status, recruiter and saved-job deadline alerts',groups:['status-notifs','recruiter-notifs','deadline','saved'],lead:'bthorng',leadStories:[23]},
-    {id:'ai',num:'04',title:'Generative AI feature',subtitle:'Consent-based resume feedback with a real AI provider',groups:['ai'],lead:'EdishAdventure',leadStories:[26]}
+  "people": [
+    {
+      "login": "EdishAdventure",
+      "name": "Jiaju",
+      "full": "Jiaju Shi",
+      "role": "GenAI matching · Architecture · Release",
+      "color": "#5865dd",
+      "initials": "JS"
+    },
+    {
+      "login": "mzllo",
+      "name": "Chloe",
+      "full": "Chloe Fokom",
+      "role": "Posting v2 APIs · Feature lead · AI acceptance",
+      "color": "#d67956",
+      "initials": "CH"
+    },
+    {
+      "login": "bthorng",
+      "name": "Brandon",
+      "full": "Brandon Thorng",
+      "role": "Matching inputs · Tests · Static maintenance",
+      "color": "#258f8b",
+      "initials": "BR"
+    },
+    {
+      "login": "mariaacelena",
+      "name": "Maria",
+      "full": "Maria Celena Said",
+      "role": "AI Matches UI · CI · Review audit",
+      "color": "#a272c9",
+      "initials": "MA"
+    },
+    {
+      "login": "KaylaKOUM",
+      "name": "Kayla",
+      "full": "Kayla Koumfieg",
+      "role": "Posting UI · Regression · Demo",
+      "color": "#d18a29",
+      "initials": "KA"
+    },
+    {
+      "login": "ElSnoozer",
+      "name": "Annik",
+      "full": "Annik Liu",
+      "role": "Qualification DB · AI validation · Team logs",
+      "color": "#3d84b7",
+      "initials": "AN"
+    }
   ],
-  collaboration: [
-    {id:'rec',feature:'Recruiter profile',steps:[
-      {login:'mzllo',label:'Sprint 2 UI handoff'},
-      {task:66,label:'Remaining profile UI / validation (#66–67)'},
-      {task:169,label:'Acceptance evidence'}
-    ],handoff:'Chloe hands over the completed Sprint 2 UI context; Annik finishes #66 and #67; Jiaju records independent acceptance evidence.',target:'Nov 12'},
-    {id:'analytics',feature:'Analytics & history',from:['ElSnoozer'],to:['mariaacelena'],handoff:'Annik #157 data contract & #174 acceptance → Maria #158 history-chart UI',target:'Nov 10'},
-    {id:'notify',feature:'Notification inbox & recruiter alerts',from:['bthorng'],to:['KaylaKOUM','EdishAdventure'],handoff:'Brandon #159 shared API → Kayla #160 inbox UI; Jiaju #162 recruiter trigger',target:'Nov 09'},
-    {id:'saved',feature:'Saved jobs & reminders',from:['mzllo'],to:['bthorng','KaylaKOUM'],handoff:'Chloe #163 saved-job API → Brandon #165 reminders and Kayla #164 UI',target:'Nov 11'},
-    {id:'ai',feature:'AI resume feedback',steps:[
-      {task:166,label:'PDF extraction'},
-      {task:167,label:'AI provider & consent'},
-      {task:168,label:'Feedback UI'}
-    ],handoff:'Annik #166 → Jiaju #167 → Kayla #168; Annik independently executes AI acceptance #179.',target:'Nov 11'}
+  "groups": [
+    {
+      "key": "posting",
+      "story": 219,
+      "id": "JP-v2",
+      "name": "Job Posting v2 · optional qualifications",
+      "short": "Posting qualifications",
+      "category": "Recruiter experience",
+      "owner": "mzllo",
+      "tasks": [
+        221,
+        222,
+        223,
+        224,
+        225,
+        239
+      ],
+      "due": "Nov 26",
+      "color": "#8c7af2",
+      "note": "Enhance completed US-06/US-07; optional typed qualifications, additive migration, recruiter/editor and public read. Keep old postings valid."
+    },
+    {
+      "key": "matching",
+      "story": 220,
+      "id": "US-25",
+      "name": "Explainable AI job matching",
+      "short": "AI Job Matching",
+      "category": "Generative AI",
+      "owner": "EdishAdventure",
+      "tasks": [
+        226,
+        227,
+        228,
+        229,
+        230,
+        240
+      ],
+      "due": "Nov 27",
+      "color": "#6686e9",
+      "note": "Second required GenAI feature: user-selected owned resume, explicit consent, preferences, eligible real postings, grounded explanations."
+    },
+    {
+      "key": "verification",
+      "story": 218,
+      "leadTask": 231,
+      "id": "REGRESSION",
+      "name": "Existing feature and AI validation",
+      "short": "Regression & AI QA",
+      "category": "Quality & validation",
+      "owner": "KaylaKOUM",
+      "tasks": [
+        231,
+        232
+      ],
+      "due": "Nov 27",
+      "color": "#43a5ac",
+      "note": "Preserve Sprint 1–3 workflows; independently revalidate existing US-20 resume feedback with truthful evidence."
+    },
+    {
+      "key": "quality",
+      "story": 218,
+      "leadTask": 233,
+      "id": "QUALITY",
+      "name": "CI, static analysis and review assurance",
+      "short": "Engineering quality",
+      "category": "Maintainability",
+      "owner": "mariaacelena",
+      "tasks": [
+        233,
+        234,
+        235
+      ],
+      "due": "Nov 28",
+      "color": "#ba81de",
+      "note": "Extend existing CI with backend Ruff, triage findings, audit unit tests and independent GitHub PR reviews."
+    },
+    {
+      "key": "delivery",
+      "story": 218,
+      "leadTask": 238,
+      "id": "RELEASE",
+      "name": "Sprint coordination and final delivery",
+      "short": "Logs, report & demo",
+      "category": "Release readiness",
+      "owner": "EdishAdventure",
+      "tasks": [
+        236,
+        237,
+        238
+      ],
+      "due": "Nov 30",
+      "color": "#66768b",
+      "note": "Meeting minutes, six accurate individual AI PDF logs and contributions, reproducible demo and final report."
+    }
   ],
-  deferred: [8,10,11,19,24,25,65],
-  milestones: [
-    {date:'Nov 04',iso:'2026-11-04',title:'Plan & contracts locked',tag:'Planning'},
-    {date:'Nov 07',iso:'2026-11-07',title:'First integration checkpoint',tag:'Development'},
-    {date:'Nov 10',iso:'2026-11-10',title:'Essential flows integrated',tag:'Development'},
-    {date:'Nov 12',iso:'2026-11-12',title:'Feature freeze',tag:'Release gate'},
-    {date:'Nov 14',iso:'2026-11-14',title:'Acceptance evidence ready',tag:'Quality'},
-    {date:'Nov 15',iso:'2026-11-15',title:'Release & rehearsal',tag:'Delivery'},
-    {date:'Nov 16',iso:'2026-11-16',title:'Final submission',tag:'Deadline'}
+  "phases": [
+    {
+      "id": "audit",
+      "name": "Contracts & scope",
+      "start": 17,
+      "end": 18
+    },
+    {
+      "id": "architecture",
+      "name": "Database / CI foundation",
+      "start": 19,
+      "end": 21
+    },
+    {
+      "id": "development",
+      "name": "Parallel feature builds",
+      "start": 19,
+      "end": 24
+    },
+    {
+      "id": "integration",
+      "name": "Integration & PR review",
+      "start": 23,
+      "end": 25
+    },
+    {
+      "id": "testing",
+      "name": "Acceptance & regression",
+      "start": 25,
+      "end": 28
+    },
+    {
+      "id": "reports",
+      "name": "Reports & final demo",
+      "start": 26,
+      "end": 30
+    }
+  ],
+  "dailyPlan": {
+    "17": {
+      "focus": "Sprint kickoff & scope baseline",
+      "goals": [
+        "Share all 23 Sprint 4 issues with six owners and reviewers",
+        "Confirm 68 provisional SP, personal capacity and hard November 30 deadline",
+        "Review feature freeze, dependencies and privacy/test requirements"
+      ]
+    },
+    "18": {
+      "focus": "Freeze qualification & AI contracts",
+      "goals": [
+        "Chloe #221: optional qualification schema, DBML and posting API",
+        "Jiaju #226: matching request/response, prompts, limits and validation",
+        "Kayla/Maria agree UI mock payloads; record decisions"
+      ]
+    },
+    "19": {
+      "focus": "Start parallel implementation",
+      "goals": [
+        "Annik #222 migration and test seed parity; Chloe #223 posting API",
+        "Brandon #227 candidate retrieval; Maria #233 backend CI static analysis",
+        "Kayla #224 posting form; open small PRs and unit-test scaffolds"
+      ]
+    },
+    "20": {
+      "focus": "Database & backend quality gate",
+      "goals": [
+        "Annik #222: additive JobQualification migration, seed SQL and schema parity",
+        "Maria #233: Ruff static analysis executes in existing GitHub Actions",
+        "Review posting contract and API compatibility before Monday integration"
+      ]
+    },
+    "21": {
+      "focus": "Secure matching input handoff",
+      "goals": [
+        "Brandon #227: owned PDF, consent and eligible bounded jobs to Jiaju",
+        "Frontend owners check loading/error states using mock responses",
+        "Weekend tasks only if personally available; flag Monday handoff risks"
+      ]
+    },
+    "22": {
+      "focus": "Contingency / integration buffer",
+      "goals": [
+        "Optional asynchronous review of schema, matching inputs and mocks",
+        "Reconcile open PR feedback and new blocking defects",
+        "No assumption of mandatory weekend team availability"
+      ]
+    },
+    "23": {
+      "focus": "Posting v2 integration gate",
+      "goals": [
+        "Chloe #223 recruiter/public APIs; Kayla #224 editor and detail UI",
+        "Run legacy posting/search/apply smoke checks and independent PR reviews",
+        "Start #231 regression, #228 matching integration and #234 static-analysis triage"
+      ]
+    },
+    "24": {
+      "focus": "AI matching integration gate",
+      "goals": [
+        "Jiaju #228: bounded GenAI matching and evidence validation",
+        "Maria #229: AI Matches UI, opt-in flow and job navigation",
+        "Demonstrate synthetic end-to-end match, safe failure modes and review queue"
+      ]
+    },
+    "25": {
+      "focus": "FEATURE FREEZE",
+      "goals": [
+        "Chloe #225: posting automated coverage; Brandon #230: AI mock/provider tests",
+        "All committed feature PRs reviewed and merged; backend/frontend CI green",
+        "Block optional feature additions; assign all remaining P0 defects"
+      ]
+    },
+    "26": {
+      "focus": "Posting acceptance + US-20 AI validation",
+      "goals": [
+        "Brandon #239 executes independent posting acceptance test",
+        "Annik #232 validates existing AI resume feedback and privacy/failure handling",
+        "Record real test results, tester/commit/environment and defects"
+      ]
+    },
+    "27": {
+      "focus": "AI acceptance + full regression",
+      "goals": [
+        "Chloe #240 executes AI job-matching acceptance with synthetic data",
+        "Kayla #231 validates complete existing recruiter/seeker workflow",
+        "Brandon #234 records static-analysis findings/fixes; no unaddressed P0 issues"
+      ]
+    },
+    "28": {
+      "focus": "Quality & review evidence audit",
+      "goals": [
+        "Maria #235 audits independent GitHub PR reviews, CI and test coverage",
+        "Verify report links, code standards and static-analysis dispositions",
+        "Use async weekend availability; no new product features"
+      ]
+    },
+    "29": {
+      "focus": "Documentation & demo readiness",
+      "goals": [
+        "Annik #236 coordinates six members' own AI-use PDFs and contributions",
+        "Kayla #237 completes synthetic demo, startup guide and rehearsal",
+        "Jiaju #238 completes summary, final repository audit and release gate"
+      ]
+    },
+    "30": {
+      "focus": "FINAL SUBMISSION / EVALUATION",
+      "goals": [
+        "Verify main CI, static analysis, PR reviews and acceptance evidence",
+        "Confirm two GenAI validations, six individual logs, meeting minutes and demo",
+        "Submit by Moodle/TA actual cut-off and perform final demonstration"
+      ]
+    }
+  },
+  "officialGoals": [
+    {
+      "id": "posting",
+      "num": "01",
+      "title": "Posting v2 qualifications",
+      "subtitle": "Flexible optional requirements across job types",
+      "groups": [
+        "posting"
+      ],
+      "lead": "mzllo",
+      "leadStories": [
+        219
+      ]
+    },
+    {
+      "id": "matching",
+      "num": "02",
+      "title": "AI Job Matching (US-25)",
+      "subtitle": "Second GenAI feature with consent and grounded recommendations",
+      "groups": [
+        "matching"
+      ],
+      "lead": "EdishAdventure",
+      "leadStories": [
+        220
+      ]
+    },
+    {
+      "id": "verification",
+      "num": "03",
+      "title": "Regression & AI validation",
+      "subtitle": "Protect previous features and validate AI feedback",
+      "groups": [
+        "verification"
+      ],
+      "lead": "KaylaKOUM",
+      "leadTasks": [
+        231
+      ]
+    },
+    {
+      "id": "quality",
+      "num": "04",
+      "title": "Quality, maintenance & delivery",
+      "subtitle": "Static analysis, reviews, logs, final report and demo",
+      "groups": [
+        "quality",
+        "delivery"
+      ],
+      "lead": "mariaacelena",
+      "leadTasks": [
+        233,
+        238
+      ]
+    }
+  ],
+  "collaboration": [
+    {
+      "id": "posting",
+      "feature": "Job Posting v2",
+      "steps": [
+        {
+          "task": 221,
+          "label": "Contract (#221)"
+        },
+        {
+          "task": 222,
+          "label": "DB migration (#222)"
+        },
+        {
+          "task": 223,
+          "label": "Posting APIs (#223)"
+        },
+        {
+          "task": 224,
+          "label": "Editor + details (#224)"
+        }
+      ],
+      "handoff": "Chloe contract → Annik schema → Chloe API + Kayla UI; Brandon independently runs #239 acceptance.",
+      "target": "Nov 23"
+    },
+    {
+      "id": "matching",
+      "feature": "Explainable AI matching",
+      "steps": [
+        {
+          "task": 226,
+          "label": "Matching contract (#226)"
+        },
+        {
+          "task": 227,
+          "label": "Owned resume + jobs (#227)"
+        },
+        {
+          "task": 228,
+          "label": "AI service (#228)"
+        },
+        {
+          "task": 229,
+          "label": "Matching UI (#229)"
+        }
+      ],
+      "handoff": "Jiaju contract → Brandon secure inputs → Jiaju grounded provider → Maria UI; Chloe independently runs #240 acceptance.",
+      "target": "Nov 24"
+    },
+    {
+      "id": "quality",
+      "feature": "Static-analysis/review gate",
+      "steps": [
+        {
+          "task": 233,
+          "label": "Ruff CI (#233)"
+        },
+        {
+          "task": 234,
+          "label": "Maintenance (#234)"
+        },
+        {
+          "task": 235,
+          "label": "PR/test audit (#235)"
+        }
+      ],
+      "handoff": "Maria CI gate → Brandon maintenance and triage → Maria audit of independent reviews/tests.",
+      "target": "Nov 28"
+    },
+    {
+      "id": "release",
+      "feature": "Regression and release",
+      "steps": [
+        {
+          "task": 231,
+          "label": "Regression (#231)"
+        },
+        {
+          "task": 232,
+          "label": "US-20 validation (#232)"
+        },
+        {
+          "task": 237,
+          "label": "Demo (#237)"
+        },
+        {
+          "task": 238,
+          "label": "Final release (#238)"
+        }
+      ],
+      "handoff": "Kayla regression + Annik US-20 AI verification → Kayla synthetic demo → Jiaju final audit and submission.",
+      "target": "Nov 29"
+    }
+  ],
+  "deferred": [
+    8,
+    10,
+    11,
+    19,
+    24,
+    25,
+    65
+  ],
+  "milestones": [
+    {
+      "date": "Nov 18",
+      "iso": "2026-11-18",
+      "title": "G1 · Contracts locked",
+      "tag": "Planning"
+    },
+    {
+      "date": "Nov 20",
+      "iso": "2026-11-20",
+      "title": "G2 · Database & CI",
+      "tag": "Foundation"
+    },
+    {
+      "date": "Nov 21",
+      "iso": "2026-11-21",
+      "title": "Secure-input handoff",
+      "tag": "Development"
+    },
+    {
+      "date": "Nov 23",
+      "iso": "2026-11-23",
+      "title": "G3 · Posting v2 integrated",
+      "tag": "Integration"
+    },
+    {
+      "date": "Nov 24",
+      "iso": "2026-11-24",
+      "title": "G4 · AI matching integrated",
+      "tag": "Integration"
+    },
+    {
+      "date": "Nov 25",
+      "iso": "2026-11-25",
+      "title": "G5 · Feature freeze",
+      "tag": "Release gate"
+    },
+    {
+      "date": "Nov 27",
+      "iso": "2026-11-27",
+      "title": "G6 · Acceptance & regression",
+      "tag": "Quality"
+    },
+    {
+      "date": "Nov 29",
+      "iso": "2026-11-29",
+      "title": "G7 · Final rehearsal & reports",
+      "tag": "Delivery"
+    },
+    {
+      "date": "Nov 30",
+      "iso": "2026-11-30",
+      "title": "Hard submission deadline",
+      "tag": "Deadline"
+    }
   ]
 };
-const createItem=(number,title,owner,kind,group,due,closed=false,priority='P0')=>({
-  number,title,owner,kind,group,due,priority,state:closed?'closed':'open',
-  url:`https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/${number}`,
-  labels:[kind==='story'?'user-story':kind==='acceptance'?'acceptance-test':'task','sprint-3',`priority:${priority.toLowerCase()}`],
-  boardStatus:null, closedAt:closed?'2026-10-27T12:00:00-04:00':null, updatedAt:'2026-11-03T12:10:00-05:00'
-});
 window.SPRINT_SNAPSHOT = {
-  capturedAt:'2026-11-03T15:43:00-05:00',
-  source:'snapshot',
-  items:[
-    createItem(13,'[US-04] Recruiter / Company Profile','ElSnoozer','story','recruiter','Nov 16'),
-    createItem(66,'[TASK-31] Build and integrate recruiter/company profile UI','ElSnoozer','task','recruiter','Nov 10'),
-    createItem(67,'[TASK-32] Test recruiter-owned company data and access rules','ElSnoozer','task','recruiter','Nov 11'),
-    createItem(169,'[TASK-79] Execute and record US-04 carryover acceptance tests','EdishAdventure','task','recruiter','Nov 12'),
-    createItem(9,'[US-15] Recruiter Application Dashboard','mzllo','story','recruiter-plus','Sprint 2',true,'P1'),
-    createItem(155,'[TASK-65] Extend US-15 with per-posting counts and application date filters','mzllo','task','recruiter-plus','Nov 09',false,'P1'),
-    createItem(156,'[TASK-66] Test new US-15 posting counts and date-filter boundaries','mzllo','task','recruiter-plus','Nov 10',false,'P1'),
-    createItem(173,'[AT-US15-03] Per-posting application counts and date-range filtering','mzllo','acceptance','recruiter-plus','Nov 14',false,'P1'),
-    createItem(16,'[US-09] Maintain a Saved-Job List','mzllo','story','saved','Nov 16'),
-    createItem(163,'[TASK-73] Saved jobs MVP: persistence and protected APIs','mzllo','task','saved','Nov 07'),
-    createItem(164,'[TASK-74] Saved jobs UI and job detail navigation','KaylaKOUM','task','saved','Nov 09'),
-    createItem(177,'[AT-US09-01] Save, reopen and remove jobs securely','mzllo','acceptance','saved','Nov 14'),
-    createItem(23,'[US-17] Application Status-Change Notification','bthorng','story','status-notifs','Nov 16'),
-    createItem(159,'[TASK-69] Notification persistence, secure retrieval and read/unread API','bthorng','task','status-notifs','Nov 07'),
-    createItem(160,'[TASK-70] In-app notification inbox UI with read/unread','KaylaKOUM','task','status-notifs','Nov 09'),
-    createItem(161,'[TASK-71] Trigger seeker status-change alerts only on actual changes','bthorng','task','status-notifs','Nov 09'),
-    createItem(175,'[AT-US17-01] Seeker receives only legitimate application status alerts','bthorng','acceptance','status-notifs','Nov 14'),
-    createItem(26,'[US-20] Request AI-Assisted Resume Feedback','EdishAdventure','story','ai','Nov 16'),
-    createItem(166,'[TASK-76] Resume feedback: authorized PDF text extraction endpoint','ElSnoozer','task','ai','Nov 08'),
-    createItem(167,'[TASK-77] Resume feedback: GenAI adapter, consent, validation and tests','EdishAdventure','task','ai','Nov 10'),
-    createItem(168,'[TASK-78] Resume feedback UI: select resume and display suggestions','KaylaKOUM','task','ai','Nov 11'),
-    createItem(179,'[AT-US20-01] AI resume feedback succeeds and fails safely','ElSnoozer','acceptance','ai','Nov 14'),
-    createItem(151,'[US-22] Application Analytics and Trends Dashboard','ElSnoozer','story','analytics','Nov 16'),
-    createItem(157,'[TASK-67] Derive and test US-22 analytics from existing application history','ElSnoozer','task','analytics','Nov 08'),
-    createItem(158,'[TASK-68] Extend seeker overview with US-22 status breakdown and trend chart','mariaacelena','task','analytics','Nov 10'),
-    createItem(174,'[AT-US22-01] Application status breakdown and activity trends','ElSnoozer','acceptance','analytics','Nov 14'),
-    createItem(152,'[US-23] Recruiter New-Application Notifications','bthorng','story','recruiter-notifs','Nov 16'),
-    createItem(162,'[TASK-72] Trigger recruiter new-application alerts and cover edge cases','EdishAdventure','task','recruiter-notifs','Nov 09'),
-    createItem(176,'[AT-US23-01] Recruiter new-application notification','bthorng','acceptance','recruiter-notifs','Nov 14'),
-    createItem(153,'[US-24] In-App Saved-Job Deadline Reminders','bthorng','story','deadline','Nov 16'),
-    createItem(165,'[TASK-75] In-app deadline reminder eligibility and deduplication','bthorng','task','deadline','Nov 11'),
-    createItem(178,'[AT-US24-01] In-app saved-job deadline reminder eligibility','KaylaKOUM','acceptance','deadline','Nov 14'),
-    createItem(154,'Sprint plan, QA gates, and submission tracker','EdishAdventure','tracker','delivery','Nov 15'),
-    createItem(170,'[TASK-80] CI, automated tests and PR regression gate','mariaacelena','task','delivery','Nov 12'),
-    createItem(171,'[TASK-81] Repeatable demo fixtures and end-to-end QA walkthrough','EdishAdventure','task','delivery','Nov 14'),
-    createItem(172,'[TASK-82] Finalize logs, report, minutes and demo','EdishAdventure','task','delivery','Nov 15')
+  "capturedAt": "2026-11-17T00:00:00-05:00",
+  "source": "snapshot",
+  "items": [
+    {
+      "number": 219,
+      "title": "Job Posting v2 — Optional Qualifications (US-06/US-07 enhancement)",
+      "owner": "mzllo",
+      "kind": "story",
+      "group": "posting",
+      "due": "Nov 26",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/219",
+      "labels": [
+        "user-story",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 220,
+      "title": "[US-25] AI Job Matching Suggestions",
+      "owner": "EdishAdventure",
+      "kind": "story",
+      "group": "matching",
+      "due": "Nov 27",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/220",
+      "labels": [
+        "user-story",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 218,
+      "title": "Sprint 4 — Canonical Backlog & Release Tracker",
+      "owner": "EdishAdventure",
+      "kind": "tracker",
+      "group": "delivery",
+      "due": "Nov 30",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/218",
+      "labels": [
+        "task",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 221,
+      "title": "[TASK-83] Finalize qualification model, API contract and DBML design",
+      "owner": "mzllo",
+      "kind": "task",
+      "group": "posting",
+      "due": "Nov 18",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/221",
+      "labels": [
+        "task",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 222,
+      "title": "[TASK-84] Implement JobQualification model, additive migration and seed parity",
+      "owner": "ElSnoozer",
+      "kind": "task",
+      "group": "posting",
+      "due": "Nov 20",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/222",
+      "labels": [
+        "task",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 223,
+      "title": "[TASK-85] Extend recruiter posting APIs and public qualification responses",
+      "owner": "mzllo",
+      "kind": "task",
+      "group": "posting",
+      "due": "Nov 23",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/223",
+      "labels": [
+        "task",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 224,
+      "title": "[TASK-86] Build optional qualification editor and public job display",
+      "owner": "KaylaKOUM",
+      "kind": "task",
+      "group": "posting",
+      "due": "Nov 23",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/224",
+      "labels": [
+        "task",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 225,
+      "title": "[TASK-87] Automated qualification tests and posting backward compatibility",
+      "owner": "mzllo",
+      "kind": "task",
+      "group": "posting",
+      "due": "Nov 25",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/225",
+      "labels": [
+        "task",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 239,
+      "title": "[AT-JPV2-01] Optional qualifications across posting creation, edits and public job details",
+      "owner": "bthorng",
+      "kind": "acceptance",
+      "group": "posting",
+      "due": "Nov 26",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/239",
+      "labels": [
+        "acceptance-test",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 226,
+      "title": "[TASK-88] Finalize AI matching architecture, prompt and response contract",
+      "owner": "EdishAdventure",
+      "kind": "task",
+      "group": "matching",
+      "due": "Nov 18",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/226",
+      "labels": [
+        "task",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 227,
+      "title": "[TASK-89] Secure resume inputs and eligible job candidate retrieval",
+      "owner": "bthorng",
+      "kind": "task",
+      "group": "matching",
+      "due": "Nov 21",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/227",
+      "labels": [
+        "task",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 228,
+      "title": "[TASK-90] Implement Generative AI matching service with grounding validation",
+      "owner": "EdishAdventure",
+      "kind": "task",
+      "group": "matching",
+      "due": "Nov 24",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/228",
+      "labels": [
+        "task",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 229,
+      "title": "[TASK-91] Build AI Matches seeker UI and API client",
+      "owner": "mariaacelena",
+      "kind": "task",
+      "group": "matching",
+      "due": "Nov 24",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/229",
+      "labels": [
+        "task",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 230,
+      "title": "[TASK-92] Automated AI matching tests and provider-failure mocks",
+      "owner": "bthorng",
+      "kind": "task",
+      "group": "matching",
+      "due": "Nov 25",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/230",
+      "labels": [
+        "task",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 240,
+      "title": "[AT-US25-01] Explainable AI resume-to-job matching succeeds and fails safely",
+      "owner": "mzllo",
+      "kind": "acceptance",
+      "group": "matching",
+      "due": "Nov 27",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/240",
+      "labels": [
+        "acceptance-test",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 231,
+      "title": "[TASK-93] Execute Sprint 4 cross-feature regression and record defects",
+      "owner": "KaylaKOUM",
+      "kind": "task",
+      "group": "verification",
+      "due": "Nov 27",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/231",
+      "labels": [
+        "task",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 232,
+      "title": "[TASK-94] Validate US-20 AI resume feedback for Sprint 4 evaluation",
+      "owner": "ElSnoozer",
+      "kind": "task",
+      "group": "verification",
+      "due": "Nov 26",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/232",
+      "labels": [
+        "task",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 233,
+      "title": "[TASK-95] Integrate backend static analysis into existing GitHub Actions CI",
+      "owner": "mariaacelena",
+      "kind": "task",
+      "group": "quality",
+      "due": "Nov 20",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/233",
+      "labels": [
+        "task",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 234,
+      "title": "[TASK-96] Triage static-analysis findings and document maintenance fixes",
+      "owner": "bthorng",
+      "kind": "task",
+      "group": "quality",
+      "due": "Nov 27",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/234",
+      "labels": [
+        "task",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 235,
+      "title": "[TASK-97] Audit CI tests, coding standards and independent PR reviews",
+      "owner": "mariaacelena",
+      "kind": "task",
+      "group": "quality",
+      "due": "Nov 28",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/235",
+      "labels": [
+        "task",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 236,
+      "title": "[TASK-98] Maintain Sprint 4 minutes, contribution and AI usage evidence",
+      "owner": "ElSnoozer",
+      "kind": "task",
+      "group": "delivery",
+      "due": "Nov 29",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/236",
+      "labels": [
+        "task",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 237,
+      "title": "[TASK-99] Prepare synthetic demo data, startup guide and final rehearsal",
+      "owner": "KaylaKOUM",
+      "kind": "task",
+      "group": "delivery",
+      "due": "Nov 29",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/237",
+      "labels": [
+        "task",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    },
+    {
+      "number": 238,
+      "title": "[TASK-100] Finalize Sprint 4 report, GitHub evidence and submission readiness",
+      "owner": "EdishAdventure",
+      "kind": "task",
+      "group": "delivery",
+      "due": "Nov 29",
+      "priority": "P0",
+      "state": "open",
+      "url": "https://github.com/EdishAdventure/SOEN341-2026-Team01/issues/238",
+      "labels": [
+        "task",
+        "sprint-4",
+        "priority:p0"
+      ],
+      "boardStatus": null,
+      "closedAt": null,
+      "updatedAt": "2026-11-17T00:00:00-05:00"
+    }
   ],
-  prs:[], ci:null, boardAvailable:false, carryoverTests:[{number:107,state:'open'},{number:108,state:'open'}],
-  note:'Assignments and issue states are sourced from GitHub on Nov 3. Board statuses were not independently verified.'
+  "prs": [],
+  "ci": null,
+  "boardAvailable": false,
+  "carryoverTests": [],
+  "note": "Sprint 4 static planning snapshot from GitHub issues #218–#240. GitHub live sync replaces state/assignees; no feature or QA result is assumed passed."
 };
