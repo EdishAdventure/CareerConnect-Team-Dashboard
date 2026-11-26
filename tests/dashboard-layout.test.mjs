@@ -12,24 +12,24 @@ const app=readFileSync(new URL('public/app.js',base),'utf8');
 const html=readFileSync(new URL('public/index.html',base),'utf8');
 const css=readFileSync(new URL('public/styles.css',base),'utf8');
 
-test('Sprint 4 baseline has six owners with 68 unique child story points',()=>{
+test('Sprint 4 baseline has six owners with 81 unique child story points',()=>{
   assert.equal(config.deadline,'2026-11-30');
-  assert.equal(config.freeze,'2026-11-25');
+  assert.equal(config.freeze,'2026-11-27');
   assert.equal(Object.keys(config.baselineSP).length,6);
-  assert.equal(Object.values(config.baselineSP).reduce((a,b)=>a+b,0),68);
+  assert.equal(Object.values(config.baselineSP).reduce((a,b)=>a+b,0),81);
   assert.deepEqual(Object.entries(config.baselineSP).sort(([a],[b])=>a.localeCompare(b)),
-    Object.entries({EdishAdventure:12,ElSnoozer:12,bthorng:11,mzllo:11,mariaacelena:12,KaylaKOUM:10}).sort(([a],[b])=>a.localeCompare(b)));
+    Object.entries({"EdishAdventure":37,"mzllo":11,"bthorng":3,"mariaacelena":7,"KaylaKOUM":11,"ElSnoozer":12}).sort(([a],[b])=>a.localeCompare(b)));
 });
 
-test('all and only 20 Sprint 4 child issues have estimates and correct one-parent grouping',()=>{
+test('all and only 24 Sprint 4 child issues have estimates and correct one-parent grouping',()=>{
   const ids=Array.from(config.groups).flatMap(group=>Array.from(group.tasks));
   assert.equal(config.groups.length,5);
-  assert.equal(ids.length,20);
-  assert.equal(new Set(ids).size,20);
+  assert.equal(ids.length,24);
+  assert.equal(new Set(ids).size,24);
   assert.deepEqual(Object.keys(config.taskSP).map(Number).sort((a,b)=>a-b),ids.sort((a,b)=>a-b));
-  assert.equal(Object.values(config.taskSP).reduce((a,b)=>a+b,0),68);
-  assert.equal(snapshot.items.length,23);
-  assert.deepEqual(Array.from(snapshot.items.filter(i=>i.kind==='acceptance'),i=>i.number).sort((a,b)=>a-b),[239,240]);
+  assert.equal(Object.values(config.taskSP).reduce((a,b)=>a+b,0),81);
+  assert.equal(snapshot.items.length,27);
+  assert.deepEqual(Array.from(snapshot.items.filter(i=>i.kind==='acceptance'),i=>i.number).sort((a,b)=>a-b),[239,240,249]);
   assert.deepEqual(Array.from(snapshot.items.filter(i=>i.kind==='tracker'||i.kind==='story'),i=>i.number).sort((a,b)=>a-b),[218,219,220]);
   assert.ok(snapshot.items.every(i=>i.state==='open'));
 });
@@ -45,13 +45,13 @@ test('Sprint 4 task points match individual planned ownership exactly',()=>{
 test('active dashboard shows Sprint 4 dates and historical Sprint 3 dropdown',()=>{
   assert.deepEqual(Object.keys(config.dailyPlan).map(Number),Array.from({length:14},(_,i)=>i+17));
   assert.equal(config.milestones.at(-1).iso,'2026-11-30');
-  assert.ok(config.milestones.some(x=>x.iso==='2026-11-25' && /freeze/i.test(x.title)));
+  assert.ok(config.milestones.some(x=>x.iso==='2026-11-27' && /integration/i.test(x.title)));
   assert.match(html,/Sprint 04/);
   assert.match(html,/sprint3\/index\.html/);
   assert.match(html,/<span>Sprint 03<\/span><small>History/);
   assert.match(html,/SPRINT 4/);
   assert.match(app,/NOVEMBER 17–30/);
-  assert.match(app,/Feature freeze Nov 25/);
+  assert.match(app,/P0 integration cutoff Nov 27/);
   assert.doesNotMatch(html,/Sprint 3 evaluation deadline|<strong>Sprint 03<\/strong>|sidebar-notice-big">Nov 16/);
   assert.doesNotMatch(app,/Sprint 3|Nov 3–16|NOVEMBER 3–16|Nov 16/);
 });
@@ -60,7 +60,7 @@ test('posting, matching, static and release handoffs resolve to assigned owners'
   const flows=Object.fromEntries(config.collaboration.map(x=>[x.id,x]));
   const who=step=>step.task?snapshot.items.find(i=>i.number===step.task)?.owner:step.login;
   assert.deepEqual(Array.from(flows.posting.steps,who),['ElSnoozer','ElSnoozer','ElSnoozer','KaylaKOUM']);
-  assert.deepEqual(Array.from(flows.matching.steps,who),['EdishAdventure','bthorng','EdishAdventure','mariaacelena']);
+  assert.deepEqual(Array.from(flows.matching.steps,who),['EdishAdventure','EdishAdventure','EdishAdventure','EdishAdventure','EdishAdventure','EdishAdventure']);
   assert.deepEqual(Array.from(flows.quality.steps,who),['mariaacelena','bthorng','mariaacelena']);
 });
 
