@@ -4,11 +4,11 @@ A two-sprint **SOEN 341 Team 01 command center**: active Sprint 4 and preserved 
 
 **Source project (private):** [EdishAdventure/SOEN341-2026-Team01](https://github.com/EdishAdventure/SOEN341-2026-Team01)  
 **Dashboard repository:** [EdishAdventure/CareerConnect-Team-Dashboard](https://github.com/EdishAdventure/CareerConnect-Team-Dashboard)  
-**Sprint deadline:** **Monday, November 30, 2026**; internal feature freeze **November 25**.
+**Sprint deadline:** **Monday, November 30, 2026**; P0 integration cutoff **November 27**.
 
 ## Sprint selector and archived Sprint 3
 
-- **Sprint 04 · Active:** `/` — [open the current dashboard](https://careerconnect-team-dashboard.edwardshi.workers.dev/) with the November 17–30 roadmap and current v3 assignments.
+- **Sprint 04 · Active:** `/` — [open the current dashboard](https://careerconnect-team-dashboard.edwardshi.workers.dev/) with the November 17–30 roadmap and revised scope and current assignments.
 - **Sprint 03 · History:** `/sprint3/index.html` — [open the Sprint 3 dashboard](https://careerconnect-team-dashboard.edwardshi.workers.dev/sprint3/index.html) with its original November 3–16 roadmap, nine workstreams and 89-point planning baseline. The top-left Sprint 03/Sprint 04 workspace dropdown switches between them.
 - The historical view keeps the actual original Sprint 3 UI and snapshot from the pre-Sprint-4 commit. Its original 89 SP is a **historical plan**, not a claim about actual completed effort. Live API access can refresh old GitHub issue open/closed states after archive, while archived Project board states are labeled as historical.
 - The protected read-only endpoint `/api/overview?sprint=3` serves old repository issues and `/api/overview?sprint=4` (or `/api/overview`) serves current Sprint 4. Historical issues **are not** reactivated in Project #1, and Sprint 3 is excluded from Sprint 4 metrics.
@@ -16,15 +16,15 @@ A two-sprint **SOEN 341 Team 01 command center**: active Sprint 4 and preserved 
 
 ## Sprint 4 scope and dashboard features
 
-- **Deadline:** Monday, November 30, 2026; **feature freeze:** Wednesday, November 25.
-- **Five workstreams:** Job Posting v2 (#219), AI Job Matching US-25 (#220), existing-feature regression/US-20 validation, CI/static analysis/PR review, documentation and demo/release.
-- **23 canonical Sprint 4 issues:** three parents (#218–#220) and 20 child tasks/acceptance issues (#221–#240).
-- **Plan v3 — 68 unique child SP:** Jiaju 12, Annik 12, Maria 12, Brandon 11, Chloe 11, Kayla 10. Parent issues are roll-ups, not extra points.
+- **Deadline:** Monday, November 30, 2026; **P0 integration cutoff:** Friday, November 27.
+- **Five workstreams:** Job Posting v2 (#219), AI Career Fit Advisor US-25 (#220), existing-feature regression/US-20 validation, CI/static analysis/PR review, documentation and demo/release.
+- **27 canonical Sprint 4 issues:** three parents (#218–#220) and 24 children (#221–#240, #246–#249).
+- **Revision v2 — 81 unique child SP:** 77 P0 and 4 P1; implementation lead Jiaju. Parent issues are roll-ups, not extra points.
 - Four overview priorities with live lead/owner mapping, planned dates, remaining effort, and issue deep links.
-- A 14-day **November 17–30** roadmap: Nov 18 contracts, Nov 20–21 foundations, Nov 23 posting integration, Nov 24 matching integration, Nov 25 freeze, Nov 26–27 QA, Nov 28–29 audit/rehearsal, Nov 30 deadline.
+- A 14-day **November 17–30** roadmap: historical plan through Nov 25; Nov 26 revised contracts, Nov 27 P0 integration, Nov 28 QA/evaluation, Nov 29 release audit and conditional P1, Nov 30 deadline.
 - My Work, team capacity, workstream, quality/acceptance, timeline and Insights views. The Quality & Tests page separates full-width acceptance tests from three responsive groups (Verification, Engineering Quality, Release Readiness) covering all eight regression/release tasks.
 - Issue/PR/CI synchronization through a protected Cloudflare Worker, 10-minute polling and manual refresh.
-- Correct Sprint 4 acceptance test issues #239 (posting) and #240 (AI) displayed without falsely claiming PASS.
+- Correct Sprint 4 acceptance test issues #239 (posting) and #240 (discovery) and #249 (P1 direct fit) displayed without falsely claiming PASS.
 - Optional GitHub Projects V2 status via a separate read-only Project token.
 
 **Canonical schedule:** [Sprint 4 execution schedule (main)](https://github.com/EdishAdventure/SOEN341-2026-Team01/blob/main/docs/Sprint4/Planning/Sprint4_Execution_Schedule.md). The dashboard is read-only; source GitHub issues/PRs/CI and executed QA evidence are authoritative. Closed issue = progress tracking completion, **not independently verified acceptance PASS**.
@@ -35,7 +35,7 @@ A two-sprint **SOEN 341 Team 01 command center**: active Sprint 4 and preserved 
 public/
   index.html       Dashboard shell
   styles.css       Responsive styles
-  snapshot.js      Sprint 4 v3 planning baseline (public by owner choice)
+  snapshot.js      Sprint 4 revised planning baseline (public by owner choice)
   app.js           Dashboard interactions and schedule model
   sprint-picker.js Accessible top-left sprint menu behavior
   favicon.svg      Site icon
@@ -57,7 +57,7 @@ npx wrangler deploy
 
 For automated GitHub-to-Cloudflare deployment, connect this repository's `main` branch in the Cloudflare dashboard. Follow **[SYNC_SETUP.md](SYNC_SETUP.md)** to protect the dashboard with Cloudflare Access and add the read-only GitHub token.
 
-**The website is not live merely because these files are in GitHub.** Cloudflare must be connected and Access configured. Until then, open `public/index.html` locally as a November 17 snapshot.
+**The website is not live merely because these files are in GitHub.** Cloudflare must be connected and Access configured. Until then, open `public/index.html` locally as a November 26 snapshot.
 
 ## Privacy and security
 
@@ -65,7 +65,7 @@ This repository is **public, as authorized by its owner**, and therefore the his
 
 ## Live ownership and information density
 
-**GitHub Issue assignees are authoritative** for all Sprint 4 tasks and parent stories. The dashboard derives the feature leads, workstream owners, and personal assignments from those records on every successful sync. The local November 17 snapshot is only a fallback when live sync is unavailable. Empty assignee lists display **Unassigned** rather than reviving a former owner.
+**GitHub Issue assignees are authoritative** for all Sprint 4 tasks and parent stories. The dashboard derives the feature leads, workstream owners, and personal assignments from those records on every successful sync. The local November 26 snapshot is only a fallback when live sync is unavailable. Empty assignee lists display **Unassigned** rather than reviving a former owner.
 
 The dashboard uses the original comfortable typography, sidebar and content widths. Overview is organized into two side-by-side rows (four official outcomes alongside the next release gate; team-wide delivery pace alongside the next team priorities). Detailed workstream/PR/CI metrics are now in **Insights** rather than an oversized Overview disclosure.
 

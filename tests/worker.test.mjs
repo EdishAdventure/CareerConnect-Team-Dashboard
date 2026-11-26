@@ -45,6 +45,7 @@ test('Worker is scoped to exactly Sprint 4 canonical issue IDs',()=>{
   const source=readFileSync(new URL('../worker.js',import.meta.url),'utf8');
   assert.match(source,/length:23/);
   assert.match(source,/218 \+ i/);
+  assert.match(source,/246, 247, 248, 249/);
   assert.match(source,/sprint2-ci\.yml\/runs\?branch=main/);
   assert.match(source,/const SPRINT3_NUMBERS/);
   assert.match(source,/9,13,16,23,26,66,67,107,108/);

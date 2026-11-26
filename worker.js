@@ -8,7 +8,8 @@ const REPO = 'SOEN341-2026-Team01';
 const FULL = OWNER + '/' + REPO;
 // Keep active Sprint 4 and archived Sprint 3 issue scopes separate.
 // Archived historical cards retain repository issue states but are no longer in Project #1.
-const NUMBERS = new Set(Array.from({length:23}, (_,i) => 218 + i));
+const NUMBERS = new Set([...Array.from({length:23}, (_,i) => 218 + i), 246, 247, 248, 249]);
+const SPRINT4_TARGETS = {"218":"Nov 30","219":"Nov 28","220":"Nov 28","221":"Nov 26","222":"Nov 26","223":"Nov 26","224":"Nov 26","225":"Nov 27","226":"Nov 26","227":"Nov 27","228":"Nov 27","229":"Nov 27","230":"Nov 28","231":"Nov 28","232":"Nov 28","233":"Nov 26","234":"Nov 28","235":"Nov 29","236":"Nov 29","237":"Nov 29","238":"Nov 30","239":"Nov 28","240":"Nov 28","246":"Nov 27","247":"Nov 29","248":"Nov 28","249":"Nov 29"};
 const SPRINT3_NUMBERS = new Set([
   9,13,16,23,26,66,67,107,108,151,152,153,154,
   155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,
@@ -147,7 +148,7 @@ async function projectStatuses(token) {
 }
 
 export function dueDate(issue, sprint = 4) {
-  const match = (issue.body || '').match(/(?:Internal due|Target)(?: date)?\s*:?\s*(?:\*\*)?\s*(Nov(?:ember)?\s+\d{1,2})(?:,?\s*2026)?/i);
+  const match = (issue.body || '').match(/(?:Revised target|Internal due|Target)(?: date)?\s*:?\s*(?:\*\*)?\s*(Nov(?:ember)?\s+\d{1,2})(?:,?\s*2026)?/i);
   if (!match) return null;
   const day = Number(match[1].match(/\d+/)[0]);
   return sprint === 3 ? (day >= 3 && day <= 16 ? 'Nov ' + String(day).padStart(2,'0') : null) : (day >= 17 && day <= 30 ? 'Nov ' + String(day).padStart(2,'0') : null);
@@ -178,7 +179,7 @@ async function dashboard(token, projectsToken, sprint = 4) {
       labels:(i.labels || []).map(l => l.name).filter(Boolean),
       updatedAt:i.updated_at, closedAt:i.closed_at,
       boardStatus:archived ? 'Archived' : (board.statuses?.get(i.number) || null),
-      due:dueDate(i, sprint)
+      due:archived ? dueDate(i, sprint) : (SPRINT4_TARGETS[i.number] || dueDate(i, sprint))
     })),
     carryoverTests:archived ? [107,108].map(number => {
       const issue = issues.find(i => i.number === number);

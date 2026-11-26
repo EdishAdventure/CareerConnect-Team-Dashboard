@@ -66,9 +66,9 @@ test('both history and live Sprint 4 sync remain Cloudflare Access protected',()
 
 test('no historical Sprint 3 issue points contaminate current sprint estimates',()=>{
   assert.equal(active.groups.length,5);
-  assert.equal(Object.values(active.taskSP).reduce((sum,n)=>sum+n,0),68);
+  assert.equal(Object.values(active.taskSP).reduce((sum,n)=>sum+n,0),81);
   const nowIDs=new Set(Array.from(active.groups).flatMap(g=>Array.from(g.tasks)));
   const previousIDs=new Set(Array.from(archive.groups).flatMap(g=>Array.from(g.tasks)));
   for(const id of nowIDs) assert.equal(previousIDs.has(id),false,'Cross-sprint task '+id);
-  assert.equal(activeContext.window.SPRINT_SNAPSHOT.items.length,23);
+  assert.equal(activeContext.window.SPRINT_SNAPSHOT.items.length,27);
 });
